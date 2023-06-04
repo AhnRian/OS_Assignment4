@@ -4175,4 +4175,106 @@ void MonsterFireGun4() {
         }
     }
 }
-//here
+
+void printQuestion()
+{
+    SetCurrentCursorPos(146, 22);
+    if (questionNum > 1)
+        printf("score : %d / %d", score, questionNum - 2);
+
+    if (questionNum > 7)
+        return;
+
+    int x = 122;
+    int y = 12;
+    SetCurrentCursorPos(x, y++);
+    printf("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n");
+    for (int i = 0; i < 7; i++)
+    {
+        SetCurrentCursorPos(x, y);
+        printf("┃");
+
+        if (i == 3)
+        {
+            SetCurrentCursorPos(x + 2, y);
+            printf("                                       ");
+            SetCurrentCursorPos(x + 22 - strlen(question[questionNum]) / 2, y);
+            printf("%s", question[questionNum]);
+        }
+        else if (i == 0 && questionNum < 7)
+        {
+            SetCurrentCursorPos(x + 2, y);
+            printf("남은 시간 : %d", (10 - (int)(time_check) % 10) / 2);
+        }
+        SetCurrentCursorPos(x + 41, y++);
+        printf("┃");
+    }
+    SetCurrentCursorPos(x, y++);
+    printf("┗━━━━━━━━━━━━━┓      ━━━━━━━━━━━━━━━━━━━━┛\n");
+    for (int i = 0; i < 5; i++)
+    {
+        SetCurrentCursorPos(x, y++);
+        printf("              ┃");
+        for (int j = 4; j > i; j--)
+        {
+            printf(" ");
+        }
+        printf("/\n");
+    }
+
+
+}
+
+int checkAnswer(int posX, int posY, char arr[1], int mode)
+{
+    int arrX = (posX - GBOARD_ORIGIN_X) / 2;
+    int arrY = posY - GBOARD_ORIGIN_Y;
+
+    arrY -= 1;
+
+    switch (answer[questionNum])
+    {
+    case 1:
+        if (0 < arrX && arrX < 11 && 0 < arrY && arrY < 4)
+            return 1;
+        break;
+    case 2:
+        if (46 < arrX && arrX < 57 && 0 < arrY && arrY < 8)
+            return 1;
+        break;
+    case 3:
+        if (0 < arrX && arrX < 10 && 4 < arrY && arrY < 12)
+            return 1;
+        break;
+    case 4:
+        if (47 < arrX && arrX < 57 && 8 < arrY && arrY < 16)
+            return 1;
+        break;
+    case 5:
+        if (0 < arrX && arrX < 9 && 12 < arrY && arrY < 20)
+            return 1;
+        break;
+    case 6:
+        if (48 < arrX && arrX < 57 && 16 < arrY && arrY < 24)
+            return 1;
+        break;
+    case 7:
+        if (0 < arrX && arrX < 8 && 20 < arrY && arrY < 28)
+            return 1;
+        break;
+    case 8:
+        if (49 < arrX && arrX < 57 && 24 < arrY && arrY < 32)
+            return 1;
+        break;
+    case 9:
+        if (0 < arrX && arrX < 7 && 28 < arrY && arrY < 36)
+            return 1;
+        break;
+    default:
+        return 0;
+        break;
+    }
+
+    return 0;
+}
+
