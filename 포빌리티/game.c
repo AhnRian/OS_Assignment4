@@ -311,6 +311,30 @@ int main() {
 
     while (1)
     {
+       
+        if (map_id == 10) {
+            showResult2();
+            for (int i = 34; i >= 2; i--) {
+                SetCurrentCursorPos(120, i);
+                printf("----------공동 제작----------");
+                SetCurrentCursorPos(120, i + 1);
+                printf("                             ");
+                SetCurrentCursorPos(120, i + 2);
+                printf("21011806 구준혁");
+                SetCurrentCursorPos(120, i + 3);
+                printf("21011756 안리안");
+                SetCurrentCursorPos(120, i + 4);
+                printf("21011763 원우섭");
+                SetCurrentCursorPos(120, i + 5);
+                printf("21011764 조승우");
+                SetCurrentCursorPos(120, i + 6);
+                printf("-----------------------------");
+                SetCurrentCursorPos(120, i + 7);
+                printf("                             ");
+                Sleep(1000);
+            }
+        }
+
         if (map_id == 3) {
             Map4Move();
         }
@@ -343,6 +367,10 @@ int main() {
 
         }
 
+        if (map_id == 9) {
+            Map_9();
+        }
+
         if (player.pos.Y - 2 >= surFaceHeight && floodingState == 1 && map_id == 9) {
             SetCurrentCursorPos((GBOARD_ORIGIN_X + GBOARD_WIDTH * 2) / 2 + 2, (GBOARD_ORIGIN_Y + GBOARD_HEIGHT) / 2);
             SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
@@ -360,7 +388,10 @@ int main() {
         time_check = (double)(end - start) / CLOCKS_PER_SEC;            // 경과시간 측정
 
 
-        
+        if (map_id == 11) {
+            showResult();
+        }
+
         SetCurrentCursorPos(40, 0);
         printf("경과시간 : %d angle : %d  \n", (int)time_check, player.angle);      // 경과시간 출력       
         if (map_id == 6)
@@ -390,6 +421,7 @@ int main() {
             DrawingGameboard();
             block_st = block_ed;
         }
+    }
 
     }
 }
