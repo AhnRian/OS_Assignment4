@@ -277,8 +277,22 @@ int main() {
     for (int i = 0; i < 10; i++) {
         monstermaplever.leverinfo[i] = 1;
     }
+    start = clock();
+    block_st = clock();
 
 
+    Timer = GetTickCount();
+    Timer2 = GetTickCount();
+    Timer3 = GetTickCount();
+    Timer4 = GetTickCount();
+    Timer5 = GetTickCount();
+
+    Test_Timer = GetTickCount();
+    Test_Timer1 = GetTickCount();
+    Test_Timer2 = GetTickCount();
+    Test_Timer3 = GetTickCount();
+
+    nextstage();
     return 0;
 }
 
