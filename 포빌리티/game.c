@@ -100,7 +100,7 @@ int player_height = 3;
 
 int cnt_teleport = 0;
 int cnt_shoot = 0;
-
+//here2
 void ShowMonster();
 void ShowMonster2();
 void ShowMonster3();
@@ -3185,3 +3185,994 @@ void removeBlock() {
     }
     lever.active = 0;
 }
+
+void map4Enter()
+{
+    //GetAsyncKeyState(f);
+    monstermaplever.pos[0].X = 24;
+    monstermaplever.pos[0].Y = 10;
+
+    monstermaplever.pos[1].X = 82;
+    monstermaplever.pos[1].Y = 37;
+
+    monstermaplever.pos[2].X = 82;
+    monstermaplever.pos[2].Y = 23;
+
+    monstermaplever.pos[3].X = 82;
+    monstermaplever.pos[3].Y = 14;
+
+    monstermaplever.pos[4].X = 128;
+    monstermaplever.pos[4].Y = 26;
+
+    monstermaplever.pos[5].X = 164;
+    monstermaplever.pos[5].Y = 26;
+
+    if (GetAsyncKeyState(0x46)) {      // Fkey 상호작용
+        if (monstermaplever.pos[0].X - 2 <= player.pos.X && player.pos.X <= monstermaplever.pos[0].X + 4 &&
+            monstermaplever.pos[0].Y - 4 <= player.pos.Y && player.pos.Y <= monstermaplever.pos[0].Y + 3) {
+            monstermaplever.leverinfo[0] = -monstermaplever.leverinfo[0];
+            if (monstermaplever.leverinfo[0] == -1) {
+                for (int x = 27; x < 41; x++) {
+                    for (int y = 39; y <= 40; y++) {
+                        map[4][y][x] = 0;
+                    }
+                }
+                DrawingGameboard();
+            }
+            else {
+                for (int x = 31; x < 41; x++) {
+                    for (int y = 39; y <= 40; y++) {
+                        map[4][y][x] = 2;
+                    }
+                }
+                DrawingGameboard();
+            }
+        }
+        if (monstermaplever.pos[1].X - 2 <= player.pos.X && player.pos.X <= monstermaplever.pos[1].X + 4 &&
+            monstermaplever.pos[1].Y - 2 <= player.pos.Y && player.pos.Y <= monstermaplever.pos[1].Y + 1) {
+            monstermaplever.leverinfo[1] = -monstermaplever.leverinfo[1];
+            if (monstermaplever.leverinfo[1] == -1) {
+                for (int x = 40; x <= 40; x++) {
+                    for (int y = 30; y <= 40; y++) {
+                        map[4][y][x] = 2;
+                    }
+                }
+                for (int x = 35; x <= 37; x++) {
+                    for (int y = 31; y <= 35; y++) {
+                        map[4][y][x] = 0;
+                    }
+                }
+                for (int x = 36; x < 41; x++) {
+                    for (int y = 39; y <= 40; y++) {
+                        map[4][y][x] = 2;
+                    }
+                }
+                monstermaplever.leverinfo[0] = 1;
+                DrawingGameboard();
+            }
+        }
+        if ((monstermaplever.pos[2].X - 2 <= player.pos.X) && (player.pos.X <= monstermaplever.pos[2].X + 4) &&
+            (monstermaplever.pos[2].Y - 2 <= player.pos.Y) && (player.pos.Y <= monstermaplever.pos[2].Y + 1)) {
+            monstermaplever.leverinfo[2] = -monstermaplever.leverinfo[2];
+            for (int x = 40; x <= 40; x++) {
+                for (int y = 16; y <= 26; y++) {
+                    map[4][y][x] = 2;
+                }
+            }
+            for (int x = 35; x <= 37; x++) {
+                for (int y = 17; y <= 21; y++) {
+                    map[4][y][x] = 0;
+                }
+            }
+            for (int x = 36; x < 41; x++) {
+                for (int y = 39; y <= 40; y++) {
+                    map[4][y][x] = 2;
+                }
+            }
+            monstermaplever.leverinfo[0] = 1;
+            DrawingGameboard();
+
+        }
+        if (monstermaplever.pos[3].X - 2 <= player.pos.X && player.pos.X <= monstermaplever.pos[3].X + 4 &&
+            monstermaplever.pos[3].Y - 2 <= player.pos.Y && player.pos.Y <= monstermaplever.pos[3].Y + 1) {
+            monstermaplever.leverinfo[3] = -monstermaplever.leverinfo[3];
+            for (int x = 47; x <= 48; x++) {
+                for (int y = 12; y <= 14; y++) {
+                    map[4][y][x] = 0;
+                }
+            }
+            monstermaplever.leverinfo[0] = 1;
+            DrawingGameboard();
+        }
+        if (monstermaplever.pos[4].X - 2 <= player.pos.X && player.pos.X <= monstermaplever.pos[4].X + 4 &&
+            monstermaplever.pos[4].Y - 2 <= player.pos.Y && player.pos.Y <= monstermaplever.pos[4].Y + 1) {
+            monstermaplever.leverinfo[4] = -monstermaplever.leverinfo[4];
+            for (int x = 36; x < 41; x++) {
+                for (int y = 39; y <= 40; y++) {
+                    map[4][y][x] = 2;
+                }
+            }
+            monstermaplever.leverinfo[0] = 1;
+            player.pos.X = 16;
+            player.pos.Y = 42;
+
+            DrawingGameboard();
+
+        }
+        if (monstermaplever.pos[5].X - 2 <= player.pos.X && player.pos.X <= monstermaplever.pos[5].X + 4 &&
+            monstermaplever.pos[5].Y - 2 <= player.pos.Y && player.pos.Y <= monstermaplever.pos[5].Y + 1) {
+            monstermaplever.leverinfo[5] = -monstermaplever.leverinfo[5];
+            player.pos.X = 108;
+            player.pos.Y = 16;
+            DrawingGameboard();
+        }
+    }
+}
+
+void Map4Move() {
+    if (GetTickCount() >= Test_Timer3 + 1000) {
+        kkkk = 0;
+        for (int i = 46; i >= 7; i--) {
+            int block = map[map_id][7][i];
+            kkkk = map[map_id][7][46];
+            map[map_id][7][i + 1] = map[map_id][7][i];
+        }
+        map[map_id][7][7] = kkkk;
+        for (int i = 7; i < 47; i++) {
+            int block = map[map_id][7][i];
+            if (block == 1 || block == -1) {
+                SetCurrentCursorPos(GBOARD_ORIGIN_X + i * 2, GBOARD_ORIGIN_Y + 7);
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 240);
+                printf("  ");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+            }
+            else {
+                SetCurrentCursorPos(GBOARD_ORIGIN_X + i * 2, GBOARD_ORIGIN_Y + 7);
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
+                printf("  ");
+            }
+        }
+        Test_Timer3 = GetTickCount();
+    }
+    if (GetTickCount() >= Test_Timer2 + 1000) {
+        kkkk = 0;
+        for (int i = 46; i >= 7; i--) {
+            int block = map[map_id][4][i];
+            kkkk = map[map_id][4][46];
+            map[map_id][4][i + 1] = map[map_id][4][i];
+        }
+        map[map_id][4][7] = kkkk;
+        for (int i = 7; i < 47; i++) {
+            int block = map[map_id][4][i];
+            if (block == 1 || block == -1) {
+                SetCurrentCursorPos(GBOARD_ORIGIN_X + i * 2, GBOARD_ORIGIN_Y + 4);
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 240);
+                printf("  ");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+            }
+            else {
+                SetCurrentCursorPos(GBOARD_ORIGIN_X + i * 2, GBOARD_ORIGIN_Y + 4);
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
+                printf("  ");
+            }
+        }
+        Test_Timer2 = GetTickCount();
+    }
+
+    if (GetTickCount() >= Test_Timer + 1000) {
+        kkkk = 0;
+        for (int i = 74; i >= 7; i--) {
+            int block = map[map_id][37][i];
+            kkkk = map[map_id][37][74];
+            map[map_id][37][i + 1] = map[map_id][37][i];
+        }
+        map[map_id][37][7] = kkkk;
+        for (int i = 7; i < 74; i++) {
+            int block = map[map_id][37][i];
+            if (block == 1 || block == -1) {
+                SetCurrentCursorPos(GBOARD_ORIGIN_X + i * 2, GBOARD_ORIGIN_Y + 37);
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 240);
+                printf("  ");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+            }
+            else {
+                SetCurrentCursorPos(GBOARD_ORIGIN_X + i * 2, GBOARD_ORIGIN_Y + 37);
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
+                printf("  ");
+            }
+        }
+        Test_Timer = GetTickCount();
+    }
+
+}
+
+void test11() {
+
+    int cnt2;
+    int ten;
+    int number = 0;
+    cnt2 = 1;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+    for (int y = 0; y < GBOARD_HEIGHT + 2; y++)
+        for (int x = 0; x < GBOARD_WIDTH + 2; x++)
+        {
+            SetCurrentCursorPos(GBOARD_ORIGIN_X + x * 2, GBOARD_ORIGIN_Y + y);
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+            printf("▨");
+        }
+
+    while (1) {
+        ten = 10;
+        if (cnt2 == 5) {
+            printf("%d\n", number);
+            if (number == 1204) {
+                map[3][10][66] = 0;
+                map[3][10][65] = 0;
+                map[3][10][64] = 0;
+                map[3][10][63] = 0;
+                map[3][10][62] = 0;
+                map[3][10][61] = 0;
+                map[3][10][60] = 0;
+
+                DrawingGameboard();
+            }
+            else {
+                DrawingGameboard();
+            }
+            break;
+        }
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 200);
+        int y = 20;
+        int x = 18 * cnt2;
+        Sleep(150);
+        if (GetKeyState(VK_NUMPAD0) & 0x8000) {
+
+            number = number * ten + 0;
+
+            for (int i = 0; i < 5; i++) {
+                SetCurrentCursorPos(x, y);
+                x += 2;
+                printf("▨");
+            }
+            y = y + 6;
+            x -= 10;
+            for (int i = 0; i < 5; i++) {
+                SetCurrentCursorPos(x, y);
+                x += 2;
+                printf("▨");
+            }
+            y = 20;
+            x -= 10;
+            for (int i = 0; i < 6; i++) {
+                SetCurrentCursorPos(x, y);
+                y++;
+                printf("▨");
+            }
+            y = 20;
+            x += 10;
+            for (int i = 0; i < 7; i++) {
+                SetCurrentCursorPos(x, y);
+                y++;
+                printf("▨");
+            }
+            cnt2++;
+        }
+        else if (GetAsyncKeyState(VK_NUMPAD1) & 0x8000) {
+
+            number = number * ten + 1;
+            for (int i = 0; i < 6; i++) {
+                SetCurrentCursorPos(x + 10, y);
+                y++;
+                printf("▨");
+            }
+
+            cnt2++;
+        }
+        else if (GetAsyncKeyState(VK_NUMPAD2) & 0x8000) {
+            number = number * ten + 2;
+            for (int i = 0; i < 6; i++) {
+                x = x + 2;
+                SetCurrentCursorPos(x, 20);
+                printf("▨");
+            }
+            for (int i = 0; i < 3; i++) {
+                SetCurrentCursorPos(x, y);
+                y++;
+                printf("▨");
+            }
+            for (int i = 0; i < 5; i++) {
+                SetCurrentCursorPos(x, y);
+                x = x - 2;
+                printf("▨");
+            }
+            for (int i = 0; i < 3; i++) {
+                SetCurrentCursorPos(x, y);
+                y++;
+                printf("▨");
+            }
+            for (int i = 0; i < 6; i++) {
+                SetCurrentCursorPos(x, y);
+                x = x + 2;
+                printf("▨");
+            }
+            cnt2++;
+        }
+        else if (GetAsyncKeyState(VK_NUMPAD3) & 0x8000) {
+            for (int i = 0; i < 5; i++) {
+                x = x + 2;
+                SetCurrentCursorPos(x, y);
+
+                printf("▨");
+            }
+            for (int i = 0; i < 3; i++) {
+                SetCurrentCursorPos(x, y);
+                y++;
+                printf("▨");
+            }
+            for (int i = 0; i < 5; i++) {
+                SetCurrentCursorPos(x, y);
+                x = x - 2;
+                printf("▨");
+            }
+            x = x + 10;
+            for (int i = 0; i < 3; i++) {
+                SetCurrentCursorPos(x, y);
+                y++;
+                printf("▨");
+            }
+            for (int i = 0; i < 5; i++) {
+                SetCurrentCursorPos(x, y);
+                x = x - 2;
+                printf("▨");
+            }
+            cnt2++;
+        }
+        else if (GetAsyncKeyState(VK_NUMPAD4) & 0x8000) {
+            number = number * ten + 4;
+            x += 2;
+            for (int i = 0; i < 5; i++) {
+                SetCurrentCursorPos(x, y);
+                y++;
+                printf("▨");
+            }
+            for (int i = 0; i < 5; i++) {
+
+                SetCurrentCursorPos(x, y);
+                x = x + 2;
+                printf("▨");
+            }
+            x = x - 4;
+            y = 21;
+            for (int i = 0; i < 6; i++) {
+                SetCurrentCursorPos(x, y);
+                y++;
+                printf("▨");
+            }
+            cnt2++;
+        }
+        else if (GetAsyncKeyState(VK_NUMPAD5) & 0x8000) {
+            for (int i = 0; i < 5; i++) {
+                x = x + 2;
+                SetCurrentCursorPos(x, y);
+                printf("▨");
+            }
+            x = x - 10;
+            for (int i = 0; i < 3; i++) {
+                SetCurrentCursorPos(x, y);
+                y++;
+                printf("▨");
+            }
+            for (int i = 0; i < 5; i++) {
+                SetCurrentCursorPos(x, y);
+                x = x + 2;
+                printf("▨");
+            }
+            for (int i = 0; i < 3; i++) {
+                SetCurrentCursorPos(x, y);
+                y++;
+                printf("▨");
+            }
+            for (int i = 0; i < 6; i++) {
+                SetCurrentCursorPos(x, y);
+                x = x - 2;
+                printf("▨");
+            }
+            cnt2++;
+        }
+        else if (GetAsyncKeyState(VK_NUMPAD6) & 0x8000) {
+            for (int i = 0; i < 6; i++) {
+                SetCurrentCursorPos(x, y);
+                y++;
+                printf("▨");
+            }
+            for (int i = 0; i < 4; i++) {
+
+                SetCurrentCursorPos(x, y);
+                x += 2;
+                printf("▨");
+            }
+            for (int i = 0; i < 4; i++) {
+                SetCurrentCursorPos(x, y);
+                y--;
+                printf("▨");
+            }
+            for (int i = 0; i < 4; i++) {
+                SetCurrentCursorPos(x, y);
+                x -= 2;
+                printf("▨");
+            }
+            cnt2++;
+        }
+        else if (GetAsyncKeyState(VK_NUMPAD7) & 0x8000) {
+
+            for (int i = 0; i < 3; i++) {
+
+                SetCurrentCursorPos(x, y);
+                x += 2;
+                printf("▨");
+            }
+            for (int i = 0; i < 6; i++) {
+                SetCurrentCursorPos(x, y);
+                y++;
+                printf("▨");
+            }
+            cnt2++;
+        }
+        else if (GetAsyncKeyState(VK_NUMPAD8) & 0x8000) {
+            for (int i = 0; i < 5; i++) {
+
+                SetCurrentCursorPos(x, y);
+                x += 2;
+                printf("▨");
+            }
+            y = y + 3;
+            x -= 10;
+            for (int i = 0; i < 5; i++) {
+                SetCurrentCursorPos(x, y);
+                x += 2;
+                printf("▨");
+            }
+            y = y + 3;
+            x -= 10;
+            for (int i = 0; i < 5; i++) {
+                SetCurrentCursorPos(x, y);
+                x += 2;
+                printf("▨");
+            }
+            y = 20;
+            x -= 10;
+            for (int i = 0; i < 6; i++) {
+                SetCurrentCursorPos(x, y);
+                y++;
+                printf("▨");
+            }
+            y = 20;
+            x += 10;
+            for (int i = 0; i < 7; i++) {
+                SetCurrentCursorPos(x, y);
+                y++;
+                printf("▨");
+            }
+            cnt2++;
+        }
+        else if (GetAsyncKeyState(VK_NUMPAD9) & 0x8000) {
+            number = number * ten + 9;
+            for (int i = 0; i < 5; i++) {
+
+                SetCurrentCursorPos(x, y);
+                x += 2;
+                printf("▨");
+            }
+            y = y + 3;
+            x -= 10;
+            for (int i = 0; i < 5; i++) {
+                SetCurrentCursorPos(x, y);
+                x += 2;
+                printf("▨");
+            }
+            y = y - 3;
+            x -= 10;
+            for (int i = 0; i < 3; i++) {
+                SetCurrentCursorPos(x, y);
+                y++;
+                printf("▨");
+            }
+            y = y - 3;
+            x += 10;
+            for (int i = 0; i < 7; i++) {
+                SetCurrentCursorPos(x, y);
+                y++;
+                printf("▨");
+            }
+
+
+            cnt2++;
+        }
+        SetCurrentCursorPos(100, 20);
+    }
+}
+
+void totalmonster() {
+    jumpmonster1();
+    jumpmonster2();
+    jumpmonster3();
+    jumpmonster4();
+}
+void jumpmonster1() {
+    if (t[0] == 0)
+    {
+        if (k[0] == 1) {
+            s[0] = s[0] - 2;
+            SetCurrentCursorPos(s[0], monster.pos[0].Y);
+            if (((s[0] >= player.pos.X - 2) && (s[0] <= player.pos.X + 2)) && (monster.pos[0].Y == player.pos.Y)) {
+                SetCurrentCursorPos(s[0], monster.pos[0].Y);
+                printf("  ");
+                bulletCnt -= 1;
+                DeleteBullet();
+                t[0] = 1;
+            }
+            else if (!(detectCollision_C(s[0] + 2, monster.pos[0].Y, monsterModel, 2))) {
+                SetCurrentCursorPos(s[0] + 2, monster.pos[0].Y);
+                printf(" ");
+                t[0] = 1;
+            }
+            else {
+                printf("<");
+                printf(" ");
+                printf(" ");
+            }
+        }
+        else if (k[0] == 2) {
+            s[0] = s[0] + 2;
+            SetCurrentCursorPos(s[0], monster.pos[0].Y);
+            if (((s[0] >= player.pos.X - 2) && (s[0] <= player.pos.X + 2)) && (monster.pos[0].Y == player.pos.Y)) {
+                SetCurrentCursorPos(s[0], monster.pos[0].Y);
+                printf("  ");
+                bulletCnt -= 1;
+                DeleteBullet();
+                t[0] = 1;
+            }
+            else if (!(detectCollision_C(s[0] + 2, monster.pos[0].Y, monsterModel, 2))) {
+                SetCurrentCursorPos(s[0], monster.pos[0].Y);
+                printf(" ");
+                t[0] = 1;
+            }
+            else {
+                printf("  ");
+                printf(">");
+            }
+        }
+    }
+}
+void jumpmonster2() {
+    if (t[1] == 0)
+    {
+        if (k[1] == 1) {
+            s[1] = s[1] - 2;
+            SetCurrentCursorPos(s[1], monster.pos[1].Y);
+            if (((s[1] >= player.pos.X - 2) && (s[1] <= player.pos.X + 2)) && (monster.pos[1].Y == player.pos.Y)) {
+                SetCurrentCursorPos(s[1] + 2, monster.pos[1].Y);
+                printf("  ");
+                bulletCnt -= 1;
+                DeleteBullet();
+                t[1] = 1;
+            }
+            else if (!(detectCollision_C(s[1], monster.pos[1].Y, monsterModel, 2))) {
+                SetCurrentCursorPos(s[1] + 2, monster.pos[1].Y);
+                printf(" ");
+                t[1] = 1;
+            }
+            else {
+                printf("<");
+                printf(" ");
+                printf(" ");
+            }
+        }
+        else if (k[1] == 2) {
+            s[1] = s[1] + 2;
+            SetCurrentCursorPos(s[1], monster.pos[1].Y);
+            if (((s[1] >= player.pos.X - 2) && (s[1] <= player.pos.X + 2)) && (monster.pos[1].Y == player.pos.Y)) {
+                SetCurrentCursorPos(s[0], monster.pos[1].Y);
+                printf("  ");
+                bulletCnt -= 1;
+                DeleteBullet();
+                t[1] = 1;
+            }
+            else if (!(detectCollision_C(s[1] + 2, monster.pos[1].Y, monsterModel, 2))) {
+                SetCurrentCursorPos(s[1], monster.pos[1].Y);
+                printf(" ");
+                t[1] = 1;
+            }
+            else {
+                printf("  ");
+                printf(">");
+            }
+        }
+    }
+}
+void jumpmonster3() {
+    if (t[2] == 0)
+    {
+        if (k[2] == 1) {
+            s[2] = s[2] - 2;
+            SetCurrentCursorPos(s[2], monster.pos[2].Y);
+            if (((s[2] >= player.pos.X - 2) && (s[2] <= player.pos.X + 2)) && (monster.pos[2].Y == player.pos.Y)) {
+                SetCurrentCursorPos(s[2] + 2, monster.pos[2].Y);
+                printf("  ");
+                bulletCnt -= 1;
+                DeleteBullet();
+                t[2] = 1;
+            }
+            else if (!(detectCollision_C(s[2], monster.pos[2].Y, monsterModel, 2))) {
+                SetCurrentCursorPos(s[2] + 2, monster.pos[2].Y);
+                printf(" ");
+                t[1] = 1;
+            }
+            else {
+                printf("<");
+                printf(" ");
+                printf(" ");
+            }
+        }
+        else if (k[2] == 2) {
+            s[2] = s[2] + 2;
+            SetCurrentCursorPos(s[2], monster.pos[2].Y);
+            if (((s[2] >= player.pos.X - 2) && (s[2] <= player.pos.X + 2)) && (monster.pos[2].Y == player.pos.Y)) {
+                SetCurrentCursorPos(s[2], monster.pos[2].Y);
+                printf("  ");
+                bulletCnt -= 1;
+                DeleteBullet();
+                t[2] = 1;
+            }
+            else if (!(detectCollision_C(s[2] + 2, monster.pos[2].Y, monsterModel, 2))) {
+                SetCurrentCursorPos(s[2], monster.pos[2].Y);
+                printf(" ");
+                t[2] = 1;
+            }
+            else {
+                printf("  ");
+                printf(">");
+            }
+        }
+    }
+}
+void jumpmonster4() {
+    if (t[3] == 0)
+    {
+        if (k[3] == 1) {
+            s[3] = s[3] - 2;
+            SetCurrentCursorPos(s[3], monster.pos[3].Y);
+            if (((s[3] >= player.pos.X - 2) && (s[3] <= player.pos.X + 2)) && (monster.pos[3].Y == player.pos.Y)) {
+                SetCurrentCursorPos(s[3] + 2, monster.pos[3].Y);
+                printf("  ");
+                bulletCnt -= 1;
+                DeleteBullet();
+                t[3] = 1;
+            }
+            else if (!(detectCollision_C(s[3], monster.pos[3].Y, monsterModel, 2))) {
+                SetCurrentCursorPos(s[3] + 2, monster.pos[3].Y);
+                printf(" ");
+                t[3] = 1;
+            }
+            else {
+                printf("<");
+                printf(" ");
+                printf(" ");
+            }
+        }
+        else if (k[3] == 2) {
+            s[3] = s[3] + 2;
+            SetCurrentCursorPos(s[2], monster.pos[3].Y);
+            if (((s[3] >= player.pos.X - 2) && (s[3] <= player.pos.X + 2)) && (monster.pos[3].Y == player.pos.Y)) {
+                SetCurrentCursorPos(s[2], monster.pos[3].Y);
+                printf("  ");
+                bulletCnt -= 1;
+                DeleteBullet();
+                t[3] = 1;
+            }
+            else if (!(detectCollision_C(s[3] + 2, monster.pos[3].Y, monsterModel, 2))) {
+                SetCurrentCursorPos(s[3], monster.pos[3].Y);
+                printf("  ");
+                t[3] = 1;
+            }
+            else {
+                printf("  ");
+                printf(">");
+            }
+        }
+    }
+}
+
+
+void ShowMonster()
+{
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 9);
+    SetCurrentCursorPos(monster.pos[0].X, monster.pos[0].Y - 1);
+    if (monsterModel[0] == 1) {
+        printf("●");
+    }
+    SetCurrentCursorPos(monster.pos[0].X, monster.pos[0].Y);
+    if (monsterModel[0] == 1) {
+        printf("◆");
+    }
+    SetCurrentCursorPos(monster.pos[1].X, monster.pos[1].Y);
+    if (monsterModel[0] == 1) {
+        printf("A");
+    }
+}
+void ShowMonster2()
+{
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 9);
+    SetCurrentCursorPos(monster.pos[1].X, monster.pos[1].Y - 1);
+    if (monsterModel[0] == 1) {
+        printf("●");
+    }
+    SetCurrentCursorPos(monster.pos[1].X, monster.pos[1].Y);
+    if (monsterModel[0] == 1) {
+        printf("◆");
+    }
+}
+void ShowMonster3()
+{
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 9);
+    SetCurrentCursorPos(monster.pos[2].X, monster.pos[2].Y - 1);
+    if (monsterModel[0] == 1) {
+        printf("●");
+    }
+    SetCurrentCursorPos(monster.pos[2].X, monster.pos[2].Y);
+    if (monsterModel[0] == 1) {
+        printf("◆");
+    }
+}
+void ShowMonster4() {
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 9);
+    SetCurrentCursorPos(monster.pos[3].X, monster.pos[3].Y - 1);
+    if (monsterModel[0] == 1) {
+        printf("●");
+    }
+    SetCurrentCursorPos(monster.pos[3].X, monster.pos[3].Y);
+    if (monsterModel[0] == 1) {
+        printf("◆");
+    }
+}
+
+void MonsterFireGun() {
+    if (GetTickCount() >= Timer2 + 1000)
+    {
+        t[0] = 0;
+        if (player.pos.X < monster.pos[0].X) {
+            k[0] = 1;
+            s[0] = monster.pos[0].X;
+        }
+        else {
+            k[0] = 2;
+            s[0] = monster.pos[0].X;
+        }
+        Timer2 = GetTickCount();
+    }
+    if (t[0] == 0)
+    {
+        if (k[0] == 1) {
+            s[0] = s[0] - 2;
+            SetCurrentCursorPos(s[0], monster.pos[0].Y);
+            if (((s[0] >= player.pos.X - 2) && (s[0] <= player.pos.X + 2)) && (monster.pos[0].Y == player.pos.Y)) {
+                SetCurrentCursorPos(s[0], monster.pos[0].Y);
+                printf("  ");
+                bulletCnt -= 1;
+                DeleteBullet();
+                t[0] = 1;
+            }
+            else if (!(detectCollision_C(s[0] + 2, monster.pos[0].Y, monsterModel, 2))) {
+                SetCurrentCursorPos(s[0] + 2, monster.pos[0].Y);
+                printf(" ");
+                t[0] = 1;
+            }
+            else {
+                printf("<");
+                printf(" ");
+                printf(" ");
+            }
+        }
+        else if (k[0] == 2) {
+            s[0] = s[0] + 2;
+            SetCurrentCursorPos(s[0], monster.pos[0].Y);
+            if (((s[0] >= player.pos.X - 2) && (s[0] <= player.pos.X + 2)) && (monster.pos[0].Y == player.pos.Y)) {
+                SetCurrentCursorPos(s[0], monster.pos[0].Y);
+                printf("  ");
+                bulletCnt -= 1;
+                DeleteBullet();
+                t[0] = 1;
+            }
+            else if (!(detectCollision_C(s[0] + 2, monster.pos[0].Y, monsterModel, 2))) {
+                SetCurrentCursorPos(s[0], monster.pos[0].Y);
+                printf(" ");
+                t[0] = 1;
+            }
+            else {
+                printf("  ");
+                printf(">");
+            }
+        }
+    }
+}
+void MonsterFireGun2() {
+    if (GetTickCount() >= Timer3 + 800)
+    {
+
+        t[1] = 0;
+        if (player.pos.X < monster.pos[1].X) {
+            k[1] = 1;
+            s[1] = monster.pos[1].X - 2;
+        }
+        else {
+            k[1] = 2;
+            s[1] = monster.pos[1].X + 2;
+        }
+        Timer3 = GetTickCount();
+    }
+    if (t[1] == 0)
+    {
+        if (k[1] == 1) {
+            s[1] = s[1] - 2;
+            SetCurrentCursorPos(s[1], monster.pos[1].Y);
+            if (((s[1] >= player.pos.X - 2) && (s[1] <= player.pos.X + 2)) && (monster.pos[1].Y == player.pos.Y)) {
+                SetCurrentCursorPos(s[1] + 2, monster.pos[1].Y);
+                printf("  ");
+                bulletCnt -= 1;
+                DeleteBullet();
+                t[1] = 1;
+            }
+            else if (!(detectCollision_C(s[1], monster.pos[1].Y, monsterModel, 2))) {
+                SetCurrentCursorPos(s[1] + 2, monster.pos[1].Y);
+                printf(" ");
+                t[1] = 1;
+            }
+            else {
+                printf("<");
+                printf(" ");
+                printf(" ");
+            }
+        }
+        else if (k[1] == 2) {
+            s[1] = s[1] + 2;
+            SetCurrentCursorPos(s[1], monster.pos[1].Y);
+            if (((s[1] >= player.pos.X - 2) && (s[1] <= player.pos.X + 2)) && (monster.pos[1].Y == player.pos.Y)) {
+                SetCurrentCursorPos(s[0], monster.pos[1].Y);
+                printf("  ");
+                bulletCnt -= 1;
+                DeleteBullet();
+                t[1] = 1;
+            }
+            else if (!(detectCollision_C(s[1] + 2, monster.pos[1].Y, monsterModel, 2))) {
+                SetCurrentCursorPos(s[1], monster.pos[1].Y);
+                printf(" ");
+                t[1] = 1;
+            }
+            else {
+                printf("  ");
+                printf(">");
+            }
+        }
+    }
+}
+void MonsterFireGun3() {
+    if (GetTickCount() >= Timer4 + 2000)
+    {
+
+        t[2] = 0;
+        if (player.pos.X < monster.pos[2].X) {
+            k[2] = 1;
+            s[2] = monster.pos[2].X - 2;
+        }
+        else {
+            k[2] = 2;
+            s[2] = monster.pos[2].X + 2;
+        }
+        Timer4 = GetTickCount();
+    }
+    if (t[2] == 0)
+    {
+        if (k[2] == 1) {
+            s[2] = s[2] - 2;
+            SetCurrentCursorPos(s[2], monster.pos[2].Y);
+            if (((s[2] >= player.pos.X - 2) && (s[2] <= player.pos.X + 2)) && (monster.pos[2].Y == player.pos.Y)) {
+                SetCurrentCursorPos(s[2] + 2, monster.pos[2].Y);
+                printf("  ");
+                bulletCnt -= 1;
+                DeleteBullet();
+                t[2] = 1;
+            }
+            else if (!(detectCollision_C(s[2], monster.pos[2].Y, monsterModel, 2))) {
+                SetCurrentCursorPos(s[2] + 2, monster.pos[2].Y);
+                printf(" ");
+                t[1] = 1;
+            }
+            else {
+                printf("<");
+                printf(" ");
+                printf(" ");
+            }
+        }
+        else if (k[2] == 2) {
+            s[2] = s[2] + 2;
+            SetCurrentCursorPos(s[2], monster.pos[2].Y);
+            if (((s[2] >= player.pos.X - 2) && (s[2] <= player.pos.X + 2)) && (monster.pos[2].Y == player.pos.Y)) {
+                SetCurrentCursorPos(s[2], monster.pos[2].Y);
+                printf("  ");
+                bulletCnt -= 1;
+                DeleteBullet();
+                t[2] = 1;
+            }
+            else if (!(detectCollision_C(s[2] + 2, monster.pos[2].Y, monsterModel, 2))) {
+                SetCurrentCursorPos(s[2], monster.pos[2].Y);
+                printf(" ");
+                t[2] = 1;
+            }
+            else {
+                printf("  ");
+                printf(">");
+            }
+        }
+    }
+}
+void MonsterFireGun4() {
+    if (GetTickCount() >= Timer5 + 2000)
+    {
+
+        t[3] = 0;
+        if (player.pos.X < monster.pos[3].X) {
+            k[3] = 1;
+            s[3] = monster.pos[3].X - 2;
+        }
+        else {
+            k[2] = 2;
+            s[3] = monster.pos[3].X + 2;
+        }
+        Timer5 = GetTickCount();
+    }
+    if (t[3] == 0)
+    {
+        if (k[3] == 1) {
+            s[3] = s[3] - 2;
+            SetCurrentCursorPos(s[3], monster.pos[3].Y);
+            if (((s[3] >= player.pos.X - 2) && (s[3] <= player.pos.X + 2)) && (monster.pos[3].Y == player.pos.Y)) {
+                SetCurrentCursorPos(s[3] + 2, monster.pos[3].Y);
+                printf("  ");
+                bulletCnt -= 1;
+                DeleteBullet();
+                t[3] = 1;
+            }
+            else if (!(detectCollision_C(s[3], monster.pos[3].Y, monsterModel, 2))) {
+                SetCurrentCursorPos(s[3] + 2, monster.pos[3].Y);
+                printf(" ");
+                t[3] = 1;
+            }
+            else {
+                printf("<");
+                printf(" ");
+                printf(" ");
+            }
+        }
+        else if (k[3] == 2) {
+            s[3] = s[3] + 2;
+            SetCurrentCursorPos(s[2], monster.pos[3].Y);
+            if (((s[3] >= player.pos.X - 2) && (s[3] <= player.pos.X + 2)) && (monster.pos[3].Y == player.pos.Y)) {
+                SetCurrentCursorPos(s[2], monster.pos[3].Y);
+                printf("  ");
+                bulletCnt -= 1;
+                DeleteBullet();
+                t[3] = 1;
+            }
+            else if (!(detectCollision_C(s[3] + 2, monster.pos[3].Y, monsterModel, 2))) {
+                SetCurrentCursorPos(s[3], monster.pos[3].Y);
+                printf("  ");
+                t[3] = 1;
+            }
+            else {
+                printf("  ");
+                printf(">");
+            }
+        }
+    }
+}
+//here
