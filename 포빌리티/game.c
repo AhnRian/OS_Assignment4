@@ -4356,3 +4356,108 @@ int checkAnswer(int posX, int posY, char arr[1], int mode)
     return 0;
 }
 
+void switchLever_map_8()
+{
+    if (map_id == 8) {
+        if (lever.active == 0) {
+        }
+
+        else if (lever.active == 1) {
+            map[map_id][12][45] = -1;
+            for (int x = 46; x <= 53; x++) {
+                map[map_id][12][x] = 0;
+                map[map_id][12][x] = 0;
+            }
+            map[map_id][12][54] = -1;
+        }
+    }
+}
+void switchLever_map_11() {
+    map_id = 0;
+    for (int i = 0; i < 10; i++)
+        visited[i] = 0;
+    nextStage();
+    setPlayer_s();
+}
+
+void turnOnOffBlock()
+{
+
+    int y = 0;
+    for (int i = 0; i < 3; i++)
+    {
+        switch (i) {
+        case 0: y = 27; break;
+        case 1: y = 29; break;
+        case 2: y = 35; break;
+        }
+        for (int x = start_X; x <= end_X; x++)
+
+        {
+            if (map[map_id][y][x] == 3)
+                map[map_id][y][x] = -3;
+            else if (map[map_id][y][x] == -3)
+                map[map_id][y][x] = 3;
+        }
+
+    }
+
+    for (int y = 1; y < 7; y++)
+    {
+        if (map[map_id][y][67] == 3)
+            map[map_id][y][67] = -3;
+        else if (map[map_id][y][67] == -3)
+            map[map_id][y][67] = 3;
+
+    }
+
+
+    for (int i = 0; i < 3; i++)
+    {
+        switch (i) {
+        case 0: y = 27; break;
+        case 1: y = 29; break;
+        case 2: y = 35; break;
+        }
+
+        for (int x = start_X; x <= end_X; x++)
+        {
+            SetCurrentCursorPos(GBOARD_ORIGIN_X + x * 2, GBOARD_ORIGIN_Y + y);
+            if (map[map_id][y][x] == 3)
+            {
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 192);
+                printf("  ");
+            }
+            else if (map[map_id][y][x] == -3) {
+                if (floodingState == 1 && surFaceHeight <= y) {
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 144);
+                }
+                else
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                printf("  ");
+            }
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+        }
+
+    }
+
+
+    for (int y = 1; y < 7; y++)
+    {
+
+        SetCurrentCursorPos(GBOARD_ORIGIN_X + 67 * 2, GBOARD_ORIGIN_Y + y);
+        if (map[map_id][y][67] == 3)
+        {
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 192);
+            printf("  ");
+        }
+        else if (map[map_id][y][67] == -3) {
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+            printf("  ");
+        }
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+
+    }
+
+
+}
