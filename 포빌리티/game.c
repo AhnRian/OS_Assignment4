@@ -277,23 +277,101 @@ int main() {
     for (int i = 0; i < 10; i++) {
         monstermaplever.leverinfo[i] = 1;
     }
+
     start = clock();
     block_st = clock();
-
 
     Timer = GetTickCount();
     Timer2 = GetTickCount();
     Timer3 = GetTickCount();
     Timer4 = GetTickCount();
     Timer5 = GetTickCount();
+    monster.pos[0].X = 6;
+    monster.pos[0].Y = 36;
+
+    monster.pos[1].X = 130;
+    monster.pos[1].Y = 16;
+
+    monster.pos[2].X = 6;
+    monster.pos[2].Y = 27;
+
+    monster.pos[3].X = 6;
+    monster.pos[3].Y = 21;
+
+    monster.pos[4].X = 50;
+    monster.pos[4].Y = 40;
 
     Test_Timer = GetTickCount();
     Test_Timer1 = GetTickCount();
     Test_Timer2 = GetTickCount();
     Test_Timer3 = GetTickCount();
-
-    nextstage();
     return 0;
+
+
+
+    while (1)
+    {
+        if (map_id == 3) {
+            Map4Move();
+        }
+
+        if (map_id == 4)
+        {
+            map4Enter();
+        }
+
+        if (map_id == 4) {
+            totalmonster();
+            ShowMonster();
+            MonsterFireGun();
+            ShowMonster2();
+            MonsterFireGun2();
+            ShowMonster3();
+            MonsterFireGun3();
+            ShowMonster4();
+            MonsterFireGun4();
+        }
+
+        if (GetAsyncKeyState(0x46) & 0x8000) {
+            if (map_id == 3) {
+                if (player.pos.X >= 124 && player.pos.X <= 136) {
+                    if (player.pos.Y >= 11 && player.pos.Y <= 19) {
+                        test11();
+                    }
+                }
+            }
+
+        }
+
+        SetCurrentCursorPos(40, 0);
+        printf("경과시간 : %d angle : %d  \n", (int)time_check, player.angle);      // 경과시간 출력       
+        if (map_id == 6)
+        {
+            if (enterTime == 0)
+            {
+                if ((int)time_check % 10 == 0)
+                    enterTime = (int)time_check;
+                else
+                    enterTime = (((int)time_check) / 10 + 1) * 10;
+            }
+            if ((int)time_check % 2 == 0)
+                printQuestion();
+        }
+
+        SetCurrentCursorPos(player.pos.X, player.pos.Y);
+        ShowPlayer();
+        Sleep(20);
+        Down();
+
+        block_ed = clock();
+        double block_spawn = (double)(block_ed - block_st) / CLOCKS_PER_SEC;
+        if ((int)block_spawn >= 5 && map_id == 2) {
+            removeBlock();
+            DrawingGameboard();
+            block_st = block_ed;
+        }
+
+    }
 }
 
 
