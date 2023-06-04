@@ -216,6 +216,24 @@ int time_gameover = 0;
 void showResult();
 void showResult2();
 
+
+//발전소
+void switchLever_map_8();
+void switchLever_map_11();
+
+void showText(char str[]) {
+    printf("        ");
+    SetCurrentCursorPos(GBOARD_ORIGIN_X + GBOARD_WIDTH / 2 + 2, 1);
+    printf("%s", str);
+    SetCurrentCursorPos(player.pos.X, player.pos.Y);
+}
+
+void showPortalInfo() {
+    printf("        ");
+    SetCurrentCursorPos(GBOARD_ORIGIN_X + GBOARD_WIDTH / 2 + 2, 1);
+    printf("in: %d, out: %d", in.mode, out.mode);
+    SetCurrentCursorPos(player.pos.X, player.pos.Y);
+}
 int main() {
 
     system("mode con:cols=200 lines=48");
@@ -854,4 +872,880 @@ void setPortalSetting()
     mapToMap[9][10] = 22;
     mapToMap[9][11] = 44;
     mapToMap[10][9] = 20;
+}
+
+
+void nextStage()
+{
+    int stageNum = map_id;
+
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+
+    for (int x = 0; x < (GBOARD_WIDTH + 2) / 2; x++)
+    {
+        for (int y = 0; y < GBOARD_HEIGHT + 2; y++)
+        {
+            SetCurrentCursorPos(GBOARD_ORIGIN_X + x * 2, GBOARD_ORIGIN_Y + y);
+            printf("■");
+            SetCurrentCursorPos(GBOARD_ORIGIN_X + (GBOARD_WIDTH + 1 - x) * 2, GBOARD_ORIGIN_Y + y);
+            printf("■");
+
+        }
+        Sleep(20);
+    }
+
+    SetCurrentCursorPos(GBOARD_ORIGIN_X + (GBOARD_WIDTH / 2) * 2, GBOARD_ORIGIN_Y + GBOARD_HEIGHT / 2);
+    printf("Stage :  %d", stageNum + 1);
+
+    Sleep(1000);
+
+    map_id++;
+    visited[map_id] = 1;
+    if (map_id == 11 || map_id == 10)
+        time_gameover = (int)time_check;
+
+    for (int y = 0; y < GBOARD_HEIGHT + 2; y++)
+    {
+        for (int x = 0; x <= (GBOARD_WIDTH + 2); x++)
+        {
+            map[map_id - 1][y][x] = tmp[map_id - 1][y][x];
+            if (map_id < 10)
+                map[map_id + 1][y][x] = tmp[map_id + 1][y][x];
+        }
+    }
+
+    if (map_id == 5 || map_id == 7) {
+
+        for (int x = (GBOARD_WIDTH + 2) / 2 - 1; x >= 0; x--)
+        {
+            for (int y = 0; y < GBOARD_HEIGHT + 2; y++)
+            {
+                if (y == 0 || x == 0 || x == (GBOARD_WIDTH + 2) || y == GBOARD_HEIGHT + 1) {
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 240);
+                    SetCurrentCursorPos(GBOARD_ORIGIN_X + x * 2, GBOARD_ORIGIN_Y + y);
+                    printf("  ");
+                    SetCurrentCursorPos(GBOARD_ORIGIN_X + (GBOARD_WIDTH + 1 - x) * 2, GBOARD_ORIGIN_Y + y);
+                    printf("  ");
+
+                }
+                else {
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                    SetCurrentCursorPos(GBOARD_ORIGIN_X + x * 2, GBOARD_ORIGIN_Y + y);
+                    printf("  ");
+                    SetCurrentCursorPos(GBOARD_ORIGIN_X + (GBOARD_WIDTH + 1 - x) * 2, GBOARD_ORIGIN_Y + y);
+                    printf("  ");
+
+                }
+
+            }
+            Sleep(20);
+        }
+    }
+    else {
+        for (int x = 0; x <= (GBOARD_WIDTH + 2) / 2; x++)
+        {
+            for (int y = 0; y < GBOARD_HEIGHT + 2; y++)
+            {
+
+                SetCurrentCursorPos(GBOARD_ORIGIN_X + ((GBOARD_WIDTH + 2) / 2 - x) * 2, GBOARD_ORIGIN_Y + y);
+
+
+
+
+                //왼쪽
+                if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 - x] == 0)
+                    printf("  ");
+                else {
+                    if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 - x] == -1)
+                    {
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 128);
+                        printf("  ");
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                    }
+                    else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 - x] == 1 || map[map_id][y][(GBOARD_WIDTH + 2) / 2 - x] == 3 || map[map_id][y][(GBOARD_WIDTH + 2) / 2 - x] == 2) {
+                        if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 - x] == 3)SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 192);
+                        else SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 240);
+
+                        printf("  ");
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                    }
+                    else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 - x] == 20)
+                    {
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 32);
+                        printf("  ");
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                    }
+                    else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 - x] == 22)
+                    {
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 32);
+                        printf("  ");
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                    }
+                    else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 - x] == 23)
+                    {
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 32);
+                        printf("▨");
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                    }
+                    else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 - x] == 24)
+                    {
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 32);
+                        printf("  ");
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                    }
+                    else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 - x] == 25)
+                    {
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 32);
+                        printf("▨");
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                    }
+                    else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 - x] == 31)
+                    {
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 64);
+                        printf("  ");
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                    }
+                    else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 - x] == 32)
+                    {
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 16);
+                        printf("  ");
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                    }
+                    else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 - x] == 33)
+                    {
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 80);
+                        printf("  ");
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                    }
+                    else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 - x] == 5) {
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
+                        printf("■");
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+                    }
+                    else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 - x] == 7) {
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
+                        if (inkflag == 0)
+                            printf("＼");
+                        else printf("  ");
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+                    }
+                    else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 - x] == 8) {
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
+                        if (inkflag == 1)
+                            printf("／");
+                        else printf("  ");
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+                    }
+                    else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 - x] == 9) {
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
+                        printf("▣");
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+                    }
+                    else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 - x] == 71)
+                    {
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 192);
+                        printf("  ");
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                    }
+                    else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 - x] == 72)
+                    {
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                        printf("  ");
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                    }
+                    else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 - x] == 73)
+                    {
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 16);
+                        printf("  ");
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                    }
+                    else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 - x] == 74)
+                    {
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 160);
+                        printf("  ");
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                    }
+                    else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 - x] == 75)
+                    {
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 240);
+                        printf("  ");
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                    }
+                    else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 - x] == 20 || map[map_id][y][(GBOARD_WIDTH + 2) / 2 - x] == 22) {
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 160);
+                        printf("  ");
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                    }
+                    else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 - x] == 114) {
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 9);
+                        printf("l ");
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                    }
+                    else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 - x] == 115) {
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 9);
+                        printf("▶");
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                    }
+                    else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 - x] == 112) {
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
+                        printf("l ");
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                    }
+                    else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 - x] == 113) {
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
+                        printf("▶");
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                    }
+
+                }
+
+                // 오른쪽
+                if (x != (GBOARD_WIDTH + 2) / 2) {
+                    SetCurrentCursorPos(GBOARD_ORIGIN_X + ((GBOARD_WIDTH + 2) / 2 + x) * 2, GBOARD_ORIGIN_Y + y);
+
+                    if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 + x] == 0)
+                        printf("  ");
+                    else {
+                        if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 + x] == -1)
+                        {
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 128);
+                            printf("  ");
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                        }
+                        else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 + x] == 1 || map[map_id][y][(GBOARD_WIDTH + 2) / 2 + x] == 3 || map[map_id][y][(GBOARD_WIDTH + 2) / 2 + x] == 2) {
+                            if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 + x] == 3)
+                                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 192);
+                            else
+                                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 240);
+                            printf("  ");
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                        }
+                        else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 + x] == 20)
+                        {
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 32);
+                            printf("  ");
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                        }
+                        else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 + x] == 22)
+                        {
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 32);
+                            printf("  ");
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                        }
+                        else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 - x] == 31)
+                        {
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 64);
+                            printf("  ");
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                        }
+                        else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 + x] == 32)
+                        {
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 16);
+                            printf("  ");
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                        }
+                        else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 + x] == 33)
+                        {
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 80);
+                            printf("  ");
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                        }
+                        else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 + x] == 5) {
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
+                            printf("■");
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+                        }
+                        else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 + x] == 7) {
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
+                            if (inkflag == 0)
+                                printf("＼");
+                            else printf("  ");
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+                        }
+                        else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 + x] == 8) {
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
+                            if (inkflag == 1)
+                                printf("／");
+                            else printf("  ");
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+                        }
+                        else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 + x] == 9) {
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
+                            printf("▣");
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+                        }
+                        else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 + x] == 71)
+                        {
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 192);
+                            printf("  ");
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                        }
+                        else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 + x] == 72)
+                        {
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                            printf("  ");
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                        }
+                        else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 + x] == 73)
+                        {
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 16);
+                            printf("  ");
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                        }
+                        else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 + x] == 74)
+                        {
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 160);
+                            printf("  ");
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                        }
+                        else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 + x] == 75)
+                        {
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 240);
+                            printf("  ");
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                        }
+                        else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 + x] == 20 || map[map_id][y][(GBOARD_WIDTH + 2) / 2 + x] == 22) {
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 160);
+                            printf("  ");
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                        }
+                        else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 + x] == 23)
+                        {
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 32);
+                            printf("▨");
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                        }
+                        else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 + x] == 24)
+                        {
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 32);
+                            printf("  ");
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                        }
+                        else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 + x] == 25)
+                        {
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 32);
+                            printf("▨");
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                        }
+                        else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 + x] == 114) {
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 9);
+                            printf("l ");
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                        }
+                        else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 + x] == 115) {
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 9);
+                            printf("▶");
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                        }
+                        else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 + x] == 112) {
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
+                            printf("l ");
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                        }
+                        else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 + x] == 113) {
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
+                            printf("▶");
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                        }
+                        else if (map[map_id][y][(GBOARD_WIDTH + 2) / 2 + x] == -22)
+                        {
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 128);
+                            printf("  ");
+                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                        }
+                    }
+                }
+
+
+            }
+            Sleep(20);
+        }
+    }
+
+    bulletCnt = 20;
+    deleteDirection();
+    player.angle = 0;
+    angle = 0b0000;
+    DrawingDirection();
+    setPortal(&in);
+    setPortal(&out);
+    setPortal(&Mirror);
+    setObject(&lever, 0, 0);
+    setObject(&plate, 0, 0);
+
+    printUI();
+}
+
+void printUI(void)
+{
+    DrawingMiniMap_S();
+    DrawingGunState();
+    DrawingBullet();
+    DrawingItem();
+    DrawingDirection();
+}
+
+void DrawingMiniMap_S() {
+    COORD pos = GetCurrentCursorPos();
+
+    for (int y = 0; y < 9; y++)
+        for (int x = 0; x < 9; x++)
+        {
+            SetCurrentCursorPos(GBOARD_ORIGIN_X + 10 + (GBOARD_WIDTH * 2) + (x * 2), GBOARD_ORIGIN_Y + y);
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
+            switch (miniMap[y][x])
+            {
+            case -1: // 세로
+                printf("│"); break;
+            case -2: //가로
+                printf("─"); break;
+            case -3: // 왼쪽 위
+                printf("┌"); break;
+            case -4: // 오른쪽 위
+                printf("┐"); break;
+            case -5: // 왼쪽 아래
+                printf("└"); break;
+            case -6: // 오른쪽 아래
+                printf("┘"); break;
+
+            case 1:
+                if (visited[1])
+                    printf("■"); break;
+            case 11:
+                if (visited[1])
+                    printf("─"); break;
+            case 2:
+                if (visited[2])
+                    printf("■"); break;
+            case 12:
+                if (visited[2])
+                    printf("│"); break;
+            case 3:
+                if (visited[3])
+                    printf("■"); break;
+            case 13:
+                if (visited[3])
+                    printf("│"); break;
+            case 23:
+                if (visited[3])
+                    printf("─"); break;
+            case 4:
+                if (visited[4])
+                    printf("■"); break;
+            case 14:
+                if (visited[4])
+                    printf("─"); break;
+            case 5:
+                if (visited[5])
+                    printf("■"); break;
+            case 6:
+                if (visited[6])
+                    printf("■"); break;
+            case 16:
+                if (visited[6])
+                    printf("─"); break;
+            case 7:
+                if (visited[7])
+                    printf("■"); break;
+            case 17:
+                if (visited[7])
+                    printf("│"); break;
+            case 8:
+                if (visited[8])
+                    printf("■"); break;
+            case 18:
+                if (visited[8])
+                    printf("│"); break;
+            case 9:
+                if (visited[9])
+                    printf("■"); break;
+            }
+        }
+
+    for (int y = 0; y < 9; y++)
+        for (int x = 0; x < 9; x++)
+        {
+            SetCurrentCursorPos(GBOARD_ORIGIN_X + 10 + (GBOARD_WIDTH * 2) + (x * 2), GBOARD_ORIGIN_Y + y);
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 1);
+            switch (miniMap[y][x])
+            {
+            case 1:
+                if (visited[1] && map_id == 1)
+                    printf("■"); break;
+            case 2:
+                if (visited[2] && map_id == 2)
+                    printf("■"); break;
+            case 3:
+                if (visited[3] && map_id == 3)
+                    printf("■"); break;
+            case 4:
+                if (visited[4] && map_id == 4)
+                    printf("■"); break;
+            case 5:
+                if (visited[5] && map_id == 5)
+                    printf("■"); break;
+            case 6:
+                if (visited[6] && map_id == 6)
+                    printf("■"); break;
+            case 7:
+                if (visited[7] && map_id == 7)
+                    printf("■"); break;
+            case 8:
+                if (visited[8] && map_id == 8)
+                    printf("■"); break;
+            case 9:
+                if (visited[9] && map_id == 9)
+                    printf("■"); break;
+            }
+        }
+
+  
+
+    SetCurrentCursorPos(pos.X, pos.Y);
+}
+
+void extendMiniMap()
+{
+    for (int y = 1; y < 8; y++)
+    {
+        for (int x = 1; x < 8; x++)
+        {
+            for (int i = 3 * y - 2; i <= 3 * y; i++)
+            {
+                for (int j = 3 * x - 2; j <= 3 * x; j++)
+                {
+                    if (miniMap1[locate1][y][x] == 4) {
+                        if (i == 3 * y - 1)miniMap_B1[0][i][j] = miniMap1[locate1][y][x];
+                        else
+                            miniMap_B1[0][i][j] = 0;
+                    }
+                    else if (miniMap1[locate1][y][x] == 5) {
+                        if (j == 3 * x - 1)miniMap_B1[0][i][j] = miniMap1[locate1][y][x];
+                        else
+                            miniMap_B1[0][i][j] = 0;
+                    }
+                    else miniMap_B1[0][i][j] = miniMap1[locate1][y][x];
+                }
+            }
+        }
+    }
+
+    for (int y = 1; y < 8; y++)
+    {
+        for (int x = 1; x < 8; x++)
+        {
+            for (int i = 3 * y - 2; i <= 3 * y; i++)
+            {
+                for (int j = 3 * x - 2; j <= 3 * x; j++)
+                {
+                    if (miniMap_B1[0][i][j] == 0) {
+                        if (miniMap2[locate2][y][x] == 4) {
+                            if (i == 3 * y - 1)miniMap_B1[0][i][j] = miniMap2[locate2][y][x];
+                            else
+                                miniMap_B1[0][i][j] = 0;
+                        }
+                        else if (miniMap2[locate2][y][x] == 5) {
+                            if (j == 3 * x - 1)miniMap_B1[0][i][j] = miniMap2[locate2][y][x];
+                            else
+                                miniMap_B1[0][i][j] = 0;
+                        }
+                        else miniMap_B1[0][i][j] = miniMap2[locate2][y][x];
+                    }
+                }
+            }
+        }
+
+    }
+
+}
+
+
+void DrawingItem(void)
+{
+    COORD pos = GetCurrentCursorPos();
+    int num = 0;
+
+    if (item == 1)num = 15;
+    else num = 8;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), num);
+    for (int y = 0; y < 3; y++)
+    {
+        for (int x = 0; x < 10; x++)
+        {
+            SetCurrentCursorPos(GBOARD_ORIGIN_X + 1 * 9 + 6 + GBOARD_WIDTH * 2 + x * 2 - 6, GBOARD_ORIGIN_Y + 39 + y);
+            {
+                switch (ItemState[0][y][x])
+                {
+
+                case 2:printf("│"); break;
+                case 3:printf("─"); break;
+                case 6:printf("┌"); break;
+                case 7:printf("┐"); break;
+                case 8:printf("└"); break;
+                case 9:printf("┘"); break;
+                default: printf("  ");
+                    break;
+                }
+            }
+        }
+    }
+
+
+    if (item == 1)num = 14;
+    else num = 8;
+
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), num);
+    SetCurrentCursorPos(GBOARD_ORIGIN_X + 1 * 9 + 6 + GBOARD_WIDTH * 2 + 1 * 2 - 3, GBOARD_ORIGIN_Y + 39 + 1);
+
+    printf("※손전등※");
+
+
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+    SetCurrentCursorPos(pos.X, pos.Y);
+}
+void DrawingGunState()
+{
+
+    COORD pos = GetCurrentCursorPos();
+    SetCurrentCursorPos(GBOARD_ORIGIN_X + GBOARD_WIDTH * 2 + 6, GBOARD_ORIGIN_Y + 10);
+    int num = 0;
+    for (int i = 0; i < 3; i++)
+    {
+        switch (i) {
+        case 0: if (gunOption == 1)num = 9;
+              else num = 8;
+            break;
+
+        case 1: if (gunOption == 2)num = 12;
+              else num = 8;
+            break;
+        case 2: if (gunOption == 3)num = 14;
+              else num = 8;
+            break;
+        }
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), num);
+        for (int y = 0; y < 3; y++)
+        {
+
+            for (int x = 0; x < 4; x++)
+            {
+                SetCurrentCursorPos(GBOARD_ORIGIN_X + i * 9 + 6 + GBOARD_WIDTH * 2 + x * 2, GBOARD_ORIGIN_Y + 10 + y);
+                {
+
+
+                    switch (gunState[0][y][x])
+                    {
+
+                    case 2:printf("│"); break;
+                    case 3:printf("─"); break;
+                    case 6:printf("┌"); break;
+                    case 7:printf("┐"); break;
+                    case 8:printf("└"); break;
+                    case 9:printf("┘"); break;
+                    default: printf("  ");
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+
+    for (int i = 0; i < 3; i++) {
+
+        switch (i) {
+        case 0: if (gunOption == 1)num = 9;
+              else num = 8;
+            break;
+
+        case 1: if (gunOption == 2)num = 12;
+              else num = 8;
+            break;
+        case 2: if (gunOption == 3)num = 14;
+              else num = 8;
+            break;
+        }
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), num);
+        SetCurrentCursorPos(GBOARD_ORIGIN_X + i * 9 + 6 + GBOARD_WIDTH * 2 + 1 * 2, GBOARD_ORIGIN_Y + 10 + 1);
+        switch (i) {
+        case 0: printf(" 총1");   break;
+        case 1: printf(" 총2");   break;
+        case 2: printf("거울");   break;
+        }
+
+
+    }
+
+
+
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+    SetCurrentCursorPos(pos.X, pos.Y);
+}
+void DrawingBullet(void)
+{
+    COORD pos = GetCurrentCursorPos();
+
+    SetCurrentCursorPos(GBOARD_ORIGIN_X + 16 + (GBOARD_WIDTH * 2) + (bulletCnt) / 10 * 4, GBOARD_ORIGIN_Y + 26 + bulletCnt % 10);
+    printf("  ");
+
+    if (bulletCnt == 20)
+    {
+        int cnt = 10;
+        if (bulletCnt < 10)cnt = bulletCnt;
+        for (int y = 0; y < cnt; y++)
+        {
+            SetCurrentCursorPos(GBOARD_ORIGIN_X + 14 + (GBOARD_WIDTH * 2), GBOARD_ORIGIN_Y + 27 + y);
+            printf("●");
+        }
+        if (bulletCnt > 10) {
+            for (int y = 0; y < bulletCnt - 10; y++)
+            {
+                SetCurrentCursorPos(GBOARD_ORIGIN_X + 14 + (GBOARD_WIDTH * 2) + 8, GBOARD_ORIGIN_Y + 27 + y);
+                printf("●");
+            }
+        }
+    }
+    SetCurrentCursorPos(GBOARD_ORIGIN_X + 14 + (GBOARD_WIDTH * 2) + 2, GBOARD_ORIGIN_Y + 25);
+    printf("        ");
+    SetCurrentCursorPos(GBOARD_ORIGIN_X + 14 + (GBOARD_WIDTH * 2) + 2, GBOARD_ORIGIN_Y + 25);
+    printf("%d / 20", bulletCnt);
+
+    SetCurrentCursorPos(pos.X, pos.Y);
+}
+void DeleteBullet()
+{
+    int num = bulletCnt;
+    if (bulletCnt >= 10) {
+        num = bulletCnt - 10;
+        SetCurrentCursorPos(GBOARD_ORIGIN_X + 14 + (GBOARD_WIDTH * 2) + 8, GBOARD_ORIGIN_Y + 27 + num);
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+        printf("  ");
+    }
+    else {
+        SetCurrentCursorPos(GBOARD_ORIGIN_X + 14 + (GBOARD_WIDTH * 2), GBOARD_ORIGIN_Y + 27 + num);
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+        printf("  ");
+    }
+
+
+
+    SetCurrentCursorPos(GBOARD_ORIGIN_X + 14 + (GBOARD_WIDTH * 2) + 2, GBOARD_ORIGIN_Y + 25);
+    printf("        ");
+    SetCurrentCursorPos(GBOARD_ORIGIN_X + 14 + (GBOARD_WIDTH * 2) + 2, GBOARD_ORIGIN_Y + 25);
+    printf("%d / 20", bulletCnt);
+    SetCurrentCursorPos(player.pos.X, player.pos.Y);
+
+    cnt_shoot++;
+}
+void DrawingDirection() {
+
+    COORD pos = GetCurrentCursorPos();
+
+
+    SetCurrentCursorPos(GBOARD_ORIGIN_X + 10 + GBOARD_WIDTH * 2, GBOARD_ORIGIN_Y + 14);
+    for (int y = 0; y < 9; y++)
+    {
+        for (int x = 0; x < 9; x++)
+        {
+
+            SetCurrentCursorPos(GBOARD_ORIGIN_X + 10 + GBOARD_WIDTH * 2 + x * 2, GBOARD_ORIGIN_Y + 14 + y);
+            //direction[player.angle / 45][y][x] != 5 && direction[player.angle / 45][y][x] >= 2
+            if (direction[player.angle / 45][y][x] != 1) {
+                if (gunOption == 1)SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 9);
+                else if (gunOption == 2)SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
+                else if (gunOption == 3)SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
+            }
+            switch (direction[player.angle / 45][y][x]) {
+            case 1: printf("■");    break;
+            case 2: printf("▶");    break;
+            case 3: printf("◀");    break;
+            case 4: printf("▲");    break;
+            case 5: printf("▼");    break;
+            case 6: printf("●");    break;
+            case 7: printf("●");    break;
+
+            }
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+
+        }
+    }
+    SetCurrentCursorPos(pos.X, pos.Y);
+
+}
+
+void deleteDirection()
+{
+    COORD pos = GetCurrentCursorPos();
+
+    SetCurrentCursorPos(GBOARD_ORIGIN_X + 10 + GBOARD_WIDTH * 2, GBOARD_ORIGIN_Y + 14);
+    for (int y = 0; y < 9; y++)
+    {
+        for (int x = 0; x < 9; x++)
+        {
+
+            SetCurrentCursorPos(GBOARD_ORIGIN_X + 10 + GBOARD_WIDTH * 2 + x * 2, GBOARD_ORIGIN_Y + 14 + y);
+            if (direction[player.angle / 45][y][x] > 1)
+                printf("  ");
+
+        }
+    }
+
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+    SetCurrentCursorPos(pos.X, pos.Y);
+
+}
+
+void DrawUiFrame()
+{
+
+    for (int x = 0; x <= 14; x++) {
+
+        SetCurrentCursorPos(GBOARD_ORIGIN_X + GBOARD_WIDTH * 2 + x * 2 + 4, GBOARD_ORIGIN_Y - 1);
+        if (x == 0)printf("┏");
+        else if (x == 14)printf("┓");
+        else printf("━");
+    }
+
+    for (int x = 0; x <= 14; x++) {
+        SetCurrentCursorPos(GBOARD_ORIGIN_X + GBOARD_WIDTH * 2 + x * 2 + 4, GBOARD_ORIGIN_Y + GBOARD_HEIGHT + 2);
+        if (x == 0)printf("┗");
+        else if (x == 14)printf("┛");
+        else printf("━");
+    }
+
+    for (int y = 0; y <= GBOARD_HEIGHT + 1; y++)
+    {
+        SetCurrentCursorPos(GBOARD_ORIGIN_X + GBOARD_WIDTH * 2 + 0 * 2 + 4, GBOARD_ORIGIN_Y + y);
+        printf("┃");
+        SetCurrentCursorPos(GBOARD_ORIGIN_X + GBOARD_WIDTH * 2 + 14 * 2 + 4, GBOARD_ORIGIN_Y + y);
+        printf("┃");
+    }
+    /////////////////////////////////////////////////////////////////
+    for (int x = 0; x <= 14; x++) {
+        SetCurrentCursorPos(GBOARD_ORIGIN_X + GBOARD_WIDTH * 2 + x * 2 + 4, GBOARD_ORIGIN_Y + 9);
+        if (x == 0)printf("┣");
+        else if (x == 14)printf("┫");
+        else printf("━");
+    }
+
+    for (int x = 0; x <= 14; x++) {
+        SetCurrentCursorPos(GBOARD_ORIGIN_X + GBOARD_WIDTH * 2 + x * 2 + 4, GBOARD_ORIGIN_Y + 10 + 3);
+        if (x == 0)printf("┣");
+        else if (x == 14)printf("┫");
+        else printf("━");
+    }
+
+    for (int x = 0; x <= 14; x++) {
+        SetCurrentCursorPos(GBOARD_ORIGIN_X + GBOARD_WIDTH * 2 + x * 2 + 4, GBOARD_ORIGIN_Y + 23);
+        if (x == 0)printf("┣");
+        else if (x == 14)printf("┫");
+        else printf("━");
+    }
+
+    for (int x = 0; x <= 14; x++) {
+        SetCurrentCursorPos(GBOARD_ORIGIN_X + GBOARD_WIDTH * 2 + x * 2 + 4, GBOARD_ORIGIN_Y + 38);
+        if (x == 0)printf("┣");
+        else if (x == 14)printf("┫");
+        else printf("━");
+    }
 }
