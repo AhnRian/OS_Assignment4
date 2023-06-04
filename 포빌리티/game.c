@@ -100,7 +100,7 @@ int player_height = 3;
 
 int cnt_teleport = 0;
 int cnt_shoot = 0;
-//here2
+
 void ShowMonster();
 void ShowMonster2();
 void ShowMonster3();
@@ -216,7 +216,6 @@ int time_gameover = 0;
 void showResult();
 void showResult2();
 
-
 //발전소
 void switchLever_map_8();
 void switchLever_map_11();
@@ -246,6 +245,7 @@ void printInfo(int n);
 
 int item1 = 0;
 int n = 1;
+
 int main() {
 
     system("mode con:cols=200 lines=48");
@@ -305,13 +305,10 @@ int main() {
     Test_Timer1 = GetTickCount();
     Test_Timer2 = GetTickCount();
     Test_Timer3 = GetTickCount();
-    return 0;
-
-
 
     while (1)
     {
-       
+
         if (map_id == 10) {
             showResult2();
             for (int i = 34; i >= 2; i--) {
@@ -422,9 +419,8 @@ int main() {
             block_st = block_ed;
         }
     }
-
-    
 }
+
 
 
 void setPlayer_s() {
@@ -2682,6 +2678,7 @@ void printUI(void)
     DrawingGunState();
     DrawingBullet();
     DrawingItem();
+    //    deleteDirection();
     DrawingDirection();
 }
 
@@ -2799,7 +2796,60 @@ void DrawingMiniMap_S() {
             }
         }
 
+    /*locate1 = map_id - 1;
+    if (locate1 > 4)
+    {
+        locate1 = 4;
+        locate2++;
+    }
+    for (int y = 0; y < 9; y++)
+        for (int x = 0; x < 9; x++)
+        {
+            SetCurrentCursorPos(GBOARD_ORIGIN_X + 10 + (GBOARD_WIDTH * 2) + (x * 2), GBOARD_ORIGIN_Y + y);
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+            switch (miniMap1[locate1][y][x])
+            {
+            case -1:
+                if (locate2 == 0)
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 3);
+                else
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
+                printf("■"); break;
+            case 1: SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
+                printf("■"); break;
+            case 2:printf("│"); break;
+            case 3:printf("─"); break;
+            case 4:printf("─"); break;
+            case 5:printf("│"); break;
+            case 6:printf("┌"); break;
+            case 7:printf("┐"); break;
+            case 8:printf("└"); break;
+            case 9:printf("┘"); break;
+            default: printf("  "); break;
+            }
+        }
+    for (int y = 0; y < 9; y++)
+        for (int x = 0; x < 9; x++)
+        {
+            SetCurrentCursorPos(GBOARD_ORIGIN_X + 10 + (GBOARD_WIDTH * 2) + (x * 2), GBOARD_ORIGIN_Y + y);
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
 
+            switch (miniMap2[locate2][y][x]) {
+            case -1: SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 3);
+                printf("■"); break;
+            case 1: SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
+                printf("■"); break;
+            case 2:printf("│"); break;
+            case 3:printf("─"); break;
+            case 4:printf("─"); break;
+            case 5:printf("│"); break;
+            case 6:printf("┌"); break;
+            case 7:printf("┐"); break;
+            case 8:printf("└"); break;
+            case 9:printf("┘"); break;
+            default: break;
+            }
+        }*/
 
     SetCurrentCursorPos(pos.X, pos.Y);
 }
@@ -2977,6 +3027,15 @@ void DrawingGunState()
     }
 
 
+    /*SetCurrentCursorPos(GBOARD_ORIGIN_X + 1 * 9 + 6 + GBOARD_WIDTH * 2 + 1 * 2, GBOARD_ORIGIN_Y + 10 + 1);
+    if (gunOption == 1)num = 14;
+    else num = 8;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), num);
+    printf(" 총2");
+
+    SetCurrentCursorPos(GBOARD_ORIGIN_X + 2 * 9 + 6 + GBOARD_WIDTH * 2 + 1 * 2, GBOARD_ORIGIN_Y + 10 + 1);
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+    printf("거울");*/
 
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
     SetCurrentCursorPos(pos.X, pos.Y);
@@ -3316,6 +3375,275 @@ void removeBlock() {
     lever.active = 0;
 }
 
+void switchLever_map_11() {
+    map_id = 0;
+    for (int i = 0; i < 10; i++)
+        visited[i] = 0;
+    nextStage();
+    setPlayer_s();
+}
+
+
+
+void drawTheSurfaceOfWater(int surfaceH)
+{
+
+
+    for (int x = 0; x < GBOARD_WIDTH + 2; x++) {
+        int block = map[map_id][surfaceH][x];
+        SetCurrentCursorPos(GBOARD_ORIGIN_X + x * 2, GBOARD_ORIGIN_Y + surfaceH);
+        if (block == 0) {
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 144);
+            printf("  ");
+            map[map_id][surfaceH][x] = 44;
+        }
+    }
+
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+}
+
+void switchLever() {
+    if (lever.active == 0) {
+
+    }
+    else if (lever.active == 1) {
+        if (map_id == 9) {
+            start_flooding = clock();
+            floodingState = 1;
+        }
+
+    }
+}
+
+void Map_9()
+{
+
+    if ((int)time_check != flag3 && ((int)time_check) - 1 != flag3) {
+        turnOnOffBlock();
+        flag3 = (int)time_check;
+    }
+
+
+    double flooding_time_check = (double)(end_flooding - start_flooding) / CLOCKS_PER_SEC;
+    if (flooding_time_check <= 12 && map_id == 9 && surFaceHeight > 0 && floodingState == 1) {
+        SetCurrentCursorPos((GBOARD_ORIGIN_X + GBOARD_WIDTH * 2) - 16, (GBOARD_ORIGIN_Y + GBOARD_HEIGHT) - 8);
+
+        if (flooding_time_check < 10) {
+            if ((int)flooding_time_check == 1) {
+                SetCurrentCursorPos((GBOARD_ORIGIN_X + GBOARD_WIDTH * 2) - 16, (GBOARD_ORIGIN_Y + GBOARD_HEIGHT) - 8);
+                printf("남은 시간 :   ");
+            }
+            SetCurrentCursorPos((GBOARD_ORIGIN_X + GBOARD_WIDTH * 2) - 16, (GBOARD_ORIGIN_Y + GBOARD_HEIGHT) - 8);
+            printf("남은 시간 : %d", 10 - (int)flooding_time_check);
+        }
+        else if ((int)flooding_time_check == 10) {
+            SetCurrentCursorPos((GBOARD_ORIGIN_X + GBOARD_WIDTH * 2) - 16, (GBOARD_ORIGIN_Y + GBOARD_HEIGHT) - 8);
+            printf("남은 시간 : %d", 0);
+        }
+        else  if ((int)flooding_time_check == 11) {
+            SetCurrentCursorPos((GBOARD_ORIGIN_X + GBOARD_WIDTH * 2) - 16, (GBOARD_ORIGIN_Y + GBOARD_HEIGHT) - 8);
+            printf("                 ");
+        }
+
+    }
+
+    if (flooding_time_check >= 10 && map_id == 9 && surFaceHeight > 0 && floodingState == 1)
+    {
+
+        if ((int)time_check != flag) {
+            surFaceHeight--;
+            drawTheSurfaceOfWater(surFaceHeight);
+            flag = (int)time_check;
+        }
+
+    }
+
+}
+
+void turnOnOffBlock()
+{
+
+    int y = 0;
+    for (int i = 0; i < 3; i++)
+    {
+        switch (i) {
+        case 0: y = 27; break;
+        case 1: y = 29; break;
+        case 2: y = 35; break;
+        }
+        for (int x = start_X; x <= end_X; x++)
+
+        {
+            if (map[map_id][y][x] == 3)
+                map[map_id][y][x] = -3;
+            else if (map[map_id][y][x] == -3)
+                map[map_id][y][x] = 3;
+        }
+
+    }
+
+    for (int y = 1; y < 7; y++)
+    {
+        if (map[map_id][y][67] == 3)
+            map[map_id][y][67] = -3;
+        else if (map[map_id][y][67] == -3)
+            map[map_id][y][67] = 3;
+
+    }
+
+
+    for (int i = 0; i < 3; i++)
+    {
+        switch (i) {
+        case 0: y = 27; break;
+        case 1: y = 29; break;
+        case 2: y = 35; break;
+        }
+
+        for (int x = start_X; x <= end_X; x++)
+        {
+            SetCurrentCursorPos(GBOARD_ORIGIN_X + x * 2, GBOARD_ORIGIN_Y + y);
+            if (map[map_id][y][x] == 3)
+            {
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 192);
+                printf("  ");
+            }
+            else if (map[map_id][y][x] == -3) {
+                if (floodingState == 1 && surFaceHeight <= y) {
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 144);
+                }
+                else
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                printf("  ");
+            }
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+        }
+
+    }
+
+
+    for (int y = 1; y < 7; y++)
+    {
+
+        SetCurrentCursorPos(GBOARD_ORIGIN_X + 67 * 2, GBOARD_ORIGIN_Y + y);
+        if (map[map_id][y][67] == 3)
+        {
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 192);
+            printf("  ");
+        }
+        else if (map[map_id][y][67] == -3) {
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+            printf("  ");
+        }
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+
+    }
+
+
+}
+
+void printQuestion()
+{
+    SetCurrentCursorPos(146, 22);
+    if (questionNum > 1)
+        printf("score : %d / %d", score, questionNum - 2);
+
+    if (questionNum > 7)
+        return;
+
+    int x = 122;
+    int y = 12;
+    SetCurrentCursorPos(x, y++);
+    printf("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n");
+    for (int i = 0; i < 7; i++)
+    {
+        SetCurrentCursorPos(x, y);
+        printf("┃");
+
+        if (i == 3)
+        {
+            SetCurrentCursorPos(x + 2, y);
+            printf("                                       ");
+            SetCurrentCursorPos(x + 22 - strlen(question[questionNum]) / 2, y);
+            printf("%s", question[questionNum]);
+        }
+        else if (i == 0 && questionNum < 7)
+        {
+            SetCurrentCursorPos(x + 2, y);
+            printf("남은 시간 : %d", (10 - (int)(time_check) % 10) / 2);
+        }
+        SetCurrentCursorPos(x + 41, y++);
+        printf("┃");
+    }
+    SetCurrentCursorPos(x, y++);
+    printf("┗━━━━━━━━━━━━━┓      ━━━━━━━━━━━━━━━━━━━━┛\n");
+    for (int i = 0; i < 5; i++)
+    {
+        SetCurrentCursorPos(x, y++);
+        printf("              ┃");
+        for (int j = 4; j > i; j--)
+        {
+            printf(" ");
+        }
+        printf("/\n");
+    }
+
+
+}
+
+int checkAnswer(int posX, int posY, char arr[1], int mode)
+{
+    int arrX = (posX - GBOARD_ORIGIN_X) / 2;
+    int arrY = posY - GBOARD_ORIGIN_Y;
+
+    arrY -= 1;
+
+    switch (answer[questionNum])
+    {
+    case 1:
+        if (0 < arrX && arrX < 11 && 0 < arrY && arrY < 4)
+            return 1;
+        break;
+    case 2:
+        if (46 < arrX && arrX < 57 && 0 < arrY && arrY < 8)
+            return 1;
+        break;
+    case 3:
+        if (0 < arrX && arrX < 10 && 4 < arrY && arrY < 12)
+            return 1;
+        break;
+    case 4:
+        if (47 < arrX && arrX < 57 && 8 < arrY && arrY < 16)
+            return 1;
+        break;
+    case 5:
+        if (0 < arrX && arrX < 9 && 12 < arrY && arrY < 20)
+            return 1;
+        break;
+    case 6:
+        if (48 < arrX && arrX < 57 && 16 < arrY && arrY < 24)
+            return 1;
+        break;
+    case 7:
+        if (0 < arrX && arrX < 8 && 20 < arrY && arrY < 28)
+            return 1;
+        break;
+    case 8:
+        if (49 < arrX && arrX < 57 && 24 < arrY && arrY < 32)
+            return 1;
+        break;
+    case 9:
+        if (0 < arrX && arrX < 7 && 28 < arrY && arrY < 36)
+            return 1;
+        break;
+    default:
+        return 0;
+        break;
+    }
+
+    return 0;
+}
+
 void map4Enter()
 {
     //GetAsyncKeyState(f);
@@ -3514,6 +3842,320 @@ void Map4Move() {
         Test_Timer = GetTickCount();
     }
 
+}
+
+void switchLever_map_8()
+{
+    if (map_id == 8) {
+        if (lever.active == 0) {
+        }
+
+        else if (lever.active == 1) {
+            map[map_id][12][45] = -1;
+            for (int x = 46; x <= 53; x++) {
+                map[map_id][12][x] = 0;
+                map[map_id][12][x] = 0;
+            }
+            map[map_id][12][54] = -1;
+        }
+    }
+}
+
+void ShowMonster()
+{
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 9);
+    SetCurrentCursorPos(monster.pos[0].X, monster.pos[0].Y - 1);
+    if (monsterModel[0] == 1) {
+        printf("●");
+    }
+    SetCurrentCursorPos(monster.pos[0].X, monster.pos[0].Y);
+    if (monsterModel[0] == 1) {
+        printf("◆");
+    }
+    SetCurrentCursorPos(monster.pos[1].X, monster.pos[1].Y);
+    if (monsterModel[0] == 1) {
+        printf("A");
+    }
+}
+void MonsterFireGun() {
+    if (GetTickCount() >= Timer2 + 1000)
+    {
+        t[0] = 0;
+        if (player.pos.X < monster.pos[0].X) {
+            k[0] = 1;
+            s[0] = monster.pos[0].X;
+        }
+        else {
+            k[0] = 2;
+            s[0] = monster.pos[0].X;
+        }
+        Timer2 = GetTickCount();
+    }
+    if (t[0] == 0)
+    {
+        if (k[0] == 1) {
+            s[0] = s[0] - 2;
+            SetCurrentCursorPos(s[0], monster.pos[0].Y);
+            if (((s[0] >= player.pos.X - 2) && (s[0] <= player.pos.X + 2)) && (monster.pos[0].Y == player.pos.Y)) {
+                SetCurrentCursorPos(s[0], monster.pos[0].Y);
+                printf("  ");
+                bulletCnt -= 1;
+                DeleteBullet();
+                t[0] = 1;
+            }
+            else if (!(detectCollision_C(s[0] + 2, monster.pos[0].Y, monsterModel, 2))) {
+                SetCurrentCursorPos(s[0] + 2, monster.pos[0].Y);
+                printf(" ");
+                t[0] = 1;
+            }
+            else {
+                printf("<");
+                printf(" ");
+                printf(" ");
+            }
+        }
+        else if (k[0] == 2) {
+            s[0] = s[0] + 2;
+            SetCurrentCursorPos(s[0], monster.pos[0].Y);
+            if (((s[0] >= player.pos.X - 2) && (s[0] <= player.pos.X + 2)) && (monster.pos[0].Y == player.pos.Y)) {
+                SetCurrentCursorPos(s[0], monster.pos[0].Y);
+                printf("  ");
+                bulletCnt -= 1;
+                DeleteBullet();
+                t[0] = 1;
+            }
+            else if (!(detectCollision_C(s[0] + 2, monster.pos[0].Y, monsterModel, 2))) {
+                SetCurrentCursorPos(s[0], monster.pos[0].Y);
+                printf(" ");
+                t[0] = 1;
+            }
+            else {
+                printf("  ");
+                printf(">");
+            }
+        }
+    }
+}
+
+
+void ShowMonster2()
+{
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 9);
+    SetCurrentCursorPos(monster.pos[1].X, monster.pos[1].Y - 1);
+    if (monsterModel[0] == 1) {
+        printf("●");
+    }
+    SetCurrentCursorPos(monster.pos[1].X, monster.pos[1].Y);
+    if (monsterModel[0] == 1) {
+        printf("◆");
+    }
+}
+void MonsterFireGun2() {
+    if (GetTickCount() >= Timer3 + 800)
+    {
+
+        t[1] = 0;
+        if (player.pos.X < monster.pos[1].X) {
+            k[1] = 1;
+            s[1] = monster.pos[1].X - 2;
+        }
+        else {
+            k[1] = 2;
+            s[1] = monster.pos[1].X + 2;
+        }
+        Timer3 = GetTickCount();
+    }
+    if (t[1] == 0)
+    {
+        if (k[1] == 1) {
+            s[1] = s[1] - 2;
+            SetCurrentCursorPos(s[1], monster.pos[1].Y);
+            if (((s[1] >= player.pos.X - 2) && (s[1] <= player.pos.X + 2)) && (monster.pos[1].Y == player.pos.Y)) {
+                SetCurrentCursorPos(s[1] + 2, monster.pos[1].Y);
+                printf("  ");
+                bulletCnt -= 1;
+                DeleteBullet();
+                t[1] = 1;
+            }
+            else if (!(detectCollision_C(s[1], monster.pos[1].Y, monsterModel, 2))) {
+                SetCurrentCursorPos(s[1] + 2, monster.pos[1].Y);
+                printf(" ");
+                t[1] = 1;
+            }
+            else {
+                printf("<");
+                printf(" ");
+                printf(" ");
+            }
+        }
+        else if (k[1] == 2) {
+            s[1] = s[1] + 2;
+            SetCurrentCursorPos(s[1], monster.pos[1].Y);
+            if (((s[1] >= player.pos.X - 2) && (s[1] <= player.pos.X + 2)) && (monster.pos[1].Y == player.pos.Y)) {
+                SetCurrentCursorPos(s[0], monster.pos[1].Y);
+                printf("  ");
+                bulletCnt -= 1;
+                DeleteBullet();
+                t[1] = 1;
+            }
+            else if (!(detectCollision_C(s[1] + 2, monster.pos[1].Y, monsterModel, 2))) {
+                SetCurrentCursorPos(s[1], monster.pos[1].Y);
+                printf(" ");
+                t[1] = 1;
+            }
+            else {
+                printf("  ");
+                printf(">");
+            }
+        }
+    }
+}
+
+void ShowMonster3()
+{
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 9);
+    SetCurrentCursorPos(monster.pos[2].X, monster.pos[2].Y - 1);
+    if (monsterModel[0] == 1) {
+        printf("●");
+    }
+    SetCurrentCursorPos(monster.pos[2].X, monster.pos[2].Y);
+    if (monsterModel[0] == 1) {
+        printf("◆");
+    }
+}
+
+void MonsterFireGun3() {
+    if (GetTickCount() >= Timer4 + 2000)
+    {
+
+        t[2] = 0;
+        if (player.pos.X < monster.pos[2].X) {
+            k[2] = 1;
+            s[2] = monster.pos[2].X - 2;
+        }
+        else {
+            k[2] = 2;
+            s[2] = monster.pos[2].X + 2;
+        }
+        Timer4 = GetTickCount();
+    }
+    if (t[2] == 0)
+    {
+        if (k[2] == 1) {
+            s[2] = s[2] - 2;
+            SetCurrentCursorPos(s[2], monster.pos[2].Y);
+            if (((s[2] >= player.pos.X - 2) && (s[2] <= player.pos.X + 2)) && (monster.pos[2].Y == player.pos.Y)) {
+                SetCurrentCursorPos(s[2] + 2, monster.pos[2].Y);
+                printf("  ");
+                bulletCnt -= 1;
+                DeleteBullet();
+                t[2] = 1;
+            }
+            else if (!(detectCollision_C(s[2], monster.pos[2].Y, monsterModel, 2))) {
+                SetCurrentCursorPos(s[2] + 2, monster.pos[2].Y);
+                printf(" ");
+                t[1] = 1;
+            }
+            else {
+                printf("<");
+                printf(" ");
+                printf(" ");
+            }
+        }
+        else if (k[2] == 2) {
+            s[2] = s[2] + 2;
+            SetCurrentCursorPos(s[2], monster.pos[2].Y);
+            if (((s[2] >= player.pos.X - 2) && (s[2] <= player.pos.X + 2)) && (monster.pos[2].Y == player.pos.Y)) {
+                SetCurrentCursorPos(s[2], monster.pos[2].Y);
+                printf("  ");
+                bulletCnt -= 1;
+                DeleteBullet();
+                t[2] = 1;
+            }
+            else if (!(detectCollision_C(s[2] + 2, monster.pos[2].Y, monsterModel, 2))) {
+                SetCurrentCursorPos(s[2], monster.pos[2].Y);
+                printf(" ");
+                t[2] = 1;
+            }
+            else {
+                printf("  ");
+                printf(">");
+            }
+        }
+    }
+}
+
+void ShowMonster4() {
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 9);
+    SetCurrentCursorPos(monster.pos[3].X, monster.pos[3].Y - 1);
+    if (monsterModel[0] == 1) {
+        printf("●");
+    }
+    SetCurrentCursorPos(monster.pos[3].X, monster.pos[3].Y);
+    if (monsterModel[0] == 1) {
+        printf("◆");
+    }
+}
+
+void MonsterFireGun4() {
+    if (GetTickCount() >= Timer5 + 2000)
+    {
+
+        t[3] = 0;
+        if (player.pos.X < monster.pos[3].X) {
+            k[3] = 1;
+            s[3] = monster.pos[3].X - 2;
+        }
+        else {
+            k[2] = 2;
+            s[3] = monster.pos[3].X + 2;
+        }
+        Timer5 = GetTickCount();
+    }
+    if (t[3] == 0)
+    {
+        if (k[3] == 1) {
+            s[3] = s[3] - 2;
+            SetCurrentCursorPos(s[3], monster.pos[3].Y);
+            if (((s[3] >= player.pos.X - 2) && (s[3] <= player.pos.X + 2)) && (monster.pos[3].Y == player.pos.Y)) {
+                SetCurrentCursorPos(s[3] + 2, monster.pos[3].Y);
+                printf("  ");
+                bulletCnt -= 1;
+                DeleteBullet();
+                t[3] = 1;
+            }
+            else if (!(detectCollision_C(s[3], monster.pos[3].Y, monsterModel, 2))) {
+                SetCurrentCursorPos(s[3] + 2, monster.pos[3].Y);
+                printf(" ");
+                t[3] = 1;
+            }
+            else {
+                printf("<");
+                printf(" ");
+                printf(" ");
+            }
+        }
+        else if (k[3] == 2) {
+            s[3] = s[3] + 2;
+            SetCurrentCursorPos(s[2], monster.pos[3].Y);
+            if (((s[3] >= player.pos.X - 2) && (s[3] <= player.pos.X + 2)) && (monster.pos[3].Y == player.pos.Y)) {
+                SetCurrentCursorPos(s[2], monster.pos[3].Y);
+                printf("  ");
+                bulletCnt -= 1;
+                DeleteBullet();
+                t[3] = 1;
+            }
+            else if (!(detectCollision_C(s[3] + 2, monster.pos[3].Y, monsterModel, 2))) {
+                SetCurrentCursorPos(s[3], monster.pos[3].Y);
+                printf("  ");
+                t[3] = 1;
+            }
+            else {
+                printf("  ");
+                printf(">");
+            }
+        }
+    }
 }
 
 void test11() {
@@ -3822,12 +4464,53 @@ void test11() {
     }
 }
 
+void showResult() {
+    // 플레이 타임
+    SetCurrentCursorPos(GBOARD_ORIGIN_X + 37 * 2, GBOARD_ORIGIN_Y + 4);
+    printf("[플레이 한 시간] %d", time_gameover);
+
+    // 포탈 발사 횟수
+    SetCurrentCursorPos(GBOARD_ORIGIN_X + 37 * 2, GBOARD_ORIGIN_Y + 5);
+    printf("[포탈 발사 횟수] %d", cnt_shoot);
+
+    // 포탈 간 이동 횟수
+    SetCurrentCursorPos(GBOARD_ORIGIN_X + 37 * 2, GBOARD_ORIGIN_Y + 6);
+    printf("[포탈 간 이동 횟수] %d", cnt_teleport);
+
+    // Restart !!
+    SetCurrentCursorPos(GBOARD_ORIGIN_X + 65 * 2, GBOARD_ORIGIN_Y + 26);
+    printf(" ↑");
+
+    SetCurrentCursorPos(GBOARD_ORIGIN_X + 65 * 2, GBOARD_ORIGIN_Y + 27);
+    printf("RESTART");
+
+
+    SetCurrentCursorPos(player.pos.X, player.pos.Y);
+}
+
+void showResult2() {
+    // 플레이 타임
+    SetCurrentCursorPos(GBOARD_ORIGIN_X + 29 * 2, GBOARD_ORIGIN_Y + 34);
+    printf("[플레이 한 시간] %d", time_gameover);
+
+    // 포탈 발사 횟수
+    SetCurrentCursorPos(GBOARD_ORIGIN_X + 29 * 2, GBOARD_ORIGIN_Y + 35);
+    printf("[포탈 발사 횟수] %d", cnt_shoot);
+
+    // 포탈 간 이동 횟수
+    SetCurrentCursorPos(GBOARD_ORIGIN_X + 29 * 2, GBOARD_ORIGIN_Y + 36);
+    printf("[포탈 간 이동 횟수] %d", cnt_teleport);
+
+    SetCurrentCursorPos(player.pos.X, player.pos.Y);
+}
+
 void totalmonster() {
     jumpmonster1();
     jumpmonster2();
     jumpmonster3();
     jumpmonster4();
 }
+
 void jumpmonster1() {
     if (t[0] == 0)
     {
@@ -4013,617 +4696,365 @@ void jumpmonster4() {
     }
 }
 
-
-void ShowMonster()
+void DrawingInfo()
 {
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 9);
-    SetCurrentCursorPos(monster.pos[0].X, monster.pos[0].Y - 1);
-    if (monsterModel[0] == 1) {
-        printf("●");
-    }
-    SetCurrentCursorPos(monster.pos[0].X, monster.pos[0].Y);
-    if (monsterModel[0] == 1) {
-        printf("◆");
-    }
-    SetCurrentCursorPos(monster.pos[1].X, monster.pos[1].Y);
-    if (monsterModel[0] == 1) {
-        printf("A");
-    }
-}
-void ShowMonster2()
-{
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 9);
-    SetCurrentCursorPos(monster.pos[1].X, monster.pos[1].Y - 1);
-    if (monsterModel[0] == 1) {
-        printf("●");
-    }
-    SetCurrentCursorPos(monster.pos[1].X, monster.pos[1].Y);
-    if (monsterModel[0] == 1) {
-        printf("◆");
-    }
-}
-void ShowMonster3()
-{
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 9);
-    SetCurrentCursorPos(monster.pos[2].X, monster.pos[2].Y - 1);
-    if (monsterModel[0] == 1) {
-        printf("●");
-    }
-    SetCurrentCursorPos(monster.pos[2].X, monster.pos[2].Y);
-    if (monsterModel[0] == 1) {
-        printf("◆");
-    }
-}
-void ShowMonster4() {
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 9);
-    SetCurrentCursorPos(monster.pos[3].X, monster.pos[3].Y - 1);
-    if (monsterModel[0] == 1) {
-        printf("●");
-    }
-    SetCurrentCursorPos(monster.pos[3].X, monster.pos[3].Y);
-    if (monsterModel[0] == 1) {
-        printf("◆");
-    }
-}
 
-void MonsterFireGun() {
-    if (GetTickCount() >= Timer2 + 1000)
-    {
-        t[0] = 0;
-        if (player.pos.X < monster.pos[0].X) {
-            k[0] = 1;
-            s[0] = monster.pos[0].X;
-        }
-        else {
-            k[0] = 2;
-            s[0] = monster.pos[0].X;
-        }
-        Timer2 = GetTickCount();
-    }
-    if (t[0] == 0)
-    {
-        if (k[0] == 1) {
-            s[0] = s[0] - 2;
-            SetCurrentCursorPos(s[0], monster.pos[0].Y);
-            if (((s[0] >= player.pos.X - 2) && (s[0] <= player.pos.X + 2)) && (monster.pos[0].Y == player.pos.Y)) {
-                SetCurrentCursorPos(s[0], monster.pos[0].Y);
-                printf("  ");
-                bulletCnt -= 1;
-                DeleteBullet();
-                t[0] = 1;
-            }
-            else if (!(detectCollision_C(s[0] + 2, monster.pos[0].Y, monsterModel, 2))) {
-                SetCurrentCursorPos(s[0] + 2, monster.pos[0].Y);
-                printf(" ");
-                t[0] = 1;
-            }
-            else {
-                printf("<");
-                printf(" ");
-                printf(" ");
-            }
-        }
-        else if (k[0] == 2) {
-            s[0] = s[0] + 2;
-            SetCurrentCursorPos(s[0], monster.pos[0].Y);
-            if (((s[0] >= player.pos.X - 2) && (s[0] <= player.pos.X + 2)) && (monster.pos[0].Y == player.pos.Y)) {
-                SetCurrentCursorPos(s[0], monster.pos[0].Y);
-                printf("  ");
-                bulletCnt -= 1;
-                DeleteBullet();
-                t[0] = 1;
-            }
-            else if (!(detectCollision_C(s[0] + 2, monster.pos[0].Y, monsterModel, 2))) {
-                SetCurrentCursorPos(s[0], monster.pos[0].Y);
-                printf(" ");
-                t[0] = 1;
-            }
-            else {
-                printf("  ");
-                printf(">");
-            }
-        }
-    }
-}
-void MonsterFireGun2() {
-    if (GetTickCount() >= Timer3 + 800)
-    {
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
 
-        t[1] = 0;
-        if (player.pos.X < monster.pos[1].X) {
-            k[1] = 1;
-            s[1] = monster.pos[1].X - 2;
-        }
-        else {
-            k[1] = 2;
-            s[1] = monster.pos[1].X + 2;
-        }
-        Timer3 = GetTickCount();
-    }
-    if (t[1] == 0)
-    {
-        if (k[1] == 1) {
-            s[1] = s[1] - 2;
-            SetCurrentCursorPos(s[1], monster.pos[1].Y);
-            if (((s[1] >= player.pos.X - 2) && (s[1] <= player.pos.X + 2)) && (monster.pos[1].Y == player.pos.Y)) {
-                SetCurrentCursorPos(s[1] + 2, monster.pos[1].Y);
-                printf("  ");
-                bulletCnt -= 1;
-                DeleteBullet();
-                t[1] = 1;
-            }
-            else if (!(detectCollision_C(s[1], monster.pos[1].Y, monsterModel, 2))) {
-                SetCurrentCursorPos(s[1] + 2, monster.pos[1].Y);
-                printf(" ");
-                t[1] = 1;
-            }
-            else {
-                printf("<");
-                printf(" ");
-                printf(" ");
-            }
-        }
-        else if (k[1] == 2) {
-            s[1] = s[1] + 2;
-            SetCurrentCursorPos(s[1], monster.pos[1].Y);
-            if (((s[1] >= player.pos.X - 2) && (s[1] <= player.pos.X + 2)) && (monster.pos[1].Y == player.pos.Y)) {
-                SetCurrentCursorPos(s[0], monster.pos[1].Y);
-                printf("  ");
-                bulletCnt -= 1;
-                DeleteBullet();
-                t[1] = 1;
-            }
-            else if (!(detectCollision_C(s[1] + 2, monster.pos[1].Y, monsterModel, 2))) {
-                SetCurrentCursorPos(s[1], monster.pos[1].Y);
-                printf(" ");
-                t[1] = 1;
-            }
-            else {
-                printf("  ");
-                printf(">");
-            }
-        }
-    }
-}
-void MonsterFireGun3() {
-    if (GetTickCount() >= Timer4 + 2000)
-    {
-
-        t[2] = 0;
-        if (player.pos.X < monster.pos[2].X) {
-            k[2] = 1;
-            s[2] = monster.pos[2].X - 2;
-        }
-        else {
-            k[2] = 2;
-            s[2] = monster.pos[2].X + 2;
-        }
-        Timer4 = GetTickCount();
-    }
-    if (t[2] == 0)
-    {
-        if (k[2] == 1) {
-            s[2] = s[2] - 2;
-            SetCurrentCursorPos(s[2], monster.pos[2].Y);
-            if (((s[2] >= player.pos.X - 2) && (s[2] <= player.pos.X + 2)) && (monster.pos[2].Y == player.pos.Y)) {
-                SetCurrentCursorPos(s[2] + 2, monster.pos[2].Y);
-                printf("  ");
-                bulletCnt -= 1;
-                DeleteBullet();
-                t[2] = 1;
-            }
-            else if (!(detectCollision_C(s[2], monster.pos[2].Y, monsterModel, 2))) {
-                SetCurrentCursorPos(s[2] + 2, monster.pos[2].Y);
-                printf(" ");
-                t[1] = 1;
-            }
-            else {
-                printf("<");
-                printf(" ");
-                printf(" ");
-            }
-        }
-        else if (k[2] == 2) {
-            s[2] = s[2] + 2;
-            SetCurrentCursorPos(s[2], monster.pos[2].Y);
-            if (((s[2] >= player.pos.X - 2) && (s[2] <= player.pos.X + 2)) && (monster.pos[2].Y == player.pos.Y)) {
-                SetCurrentCursorPos(s[2], monster.pos[2].Y);
-                printf("  ");
-                bulletCnt -= 1;
-                DeleteBullet();
-                t[2] = 1;
-            }
-            else if (!(detectCollision_C(s[2] + 2, monster.pos[2].Y, monsterModel, 2))) {
-                SetCurrentCursorPos(s[2], monster.pos[2].Y);
-                printf(" ");
-                t[2] = 1;
-            }
-            else {
-                printf("  ");
-                printf(">");
-            }
-        }
-    }
-}
-void MonsterFireGun4() {
-    if (GetTickCount() >= Timer5 + 2000)
-    {
-
-        t[3] = 0;
-        if (player.pos.X < monster.pos[3].X) {
-            k[3] = 1;
-            s[3] = monster.pos[3].X - 2;
-        }
-        else {
-            k[2] = 2;
-            s[3] = monster.pos[3].X + 2;
-        }
-        Timer5 = GetTickCount();
-    }
-    if (t[3] == 0)
-    {
-        if (k[3] == 1) {
-            s[3] = s[3] - 2;
-            SetCurrentCursorPos(s[3], monster.pos[3].Y);
-            if (((s[3] >= player.pos.X - 2) && (s[3] <= player.pos.X + 2)) && (monster.pos[3].Y == player.pos.Y)) {
-                SetCurrentCursorPos(s[3] + 2, monster.pos[3].Y);
-                printf("  ");
-                bulletCnt -= 1;
-                DeleteBullet();
-                t[3] = 1;
-            }
-            else if (!(detectCollision_C(s[3], monster.pos[3].Y, monsterModel, 2))) {
-                SetCurrentCursorPos(s[3] + 2, monster.pos[3].Y);
-                printf(" ");
-                t[3] = 1;
-            }
-            else {
-                printf("<");
-                printf(" ");
-                printf(" ");
-            }
-        }
-        else if (k[3] == 2) {
-            s[3] = s[3] + 2;
-            SetCurrentCursorPos(s[2], monster.pos[3].Y);
-            if (((s[3] >= player.pos.X - 2) && (s[3] <= player.pos.X + 2)) && (monster.pos[3].Y == player.pos.Y)) {
-                SetCurrentCursorPos(s[2], monster.pos[3].Y);
-                printf("  ");
-                bulletCnt -= 1;
-                DeleteBullet();
-                t[3] = 1;
-            }
-            else if (!(detectCollision_C(s[3] + 2, monster.pos[3].Y, monsterModel, 2))) {
-                SetCurrentCursorPos(s[3], monster.pos[3].Y);
-                printf("  ");
-                t[3] = 1;
-            }
-            else {
-                printf("  ");
-                printf(">");
-            }
-        }
-    }
-}
-
-void printQuestion()
-{
-    SetCurrentCursorPos(146, 22);
-    if (questionNum > 1)
-        printf("score : %d / %d", score, questionNum - 2);
-
-    if (questionNum > 7)
-        return;
-
-    int x = 122;
-    int y = 12;
-    SetCurrentCursorPos(x, y++);
-    printf("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n");
-    for (int i = 0; i < 7; i++)
-    {
-        SetCurrentCursorPos(x, y);
-        printf("┃");
-
-        if (i == 3)
+    for (int y = 0; y < GBOARD_HEIGHT + 2; y++)
+        for (int x = 0; x < GBOARD_WIDTH + 2; x++)
         {
-            SetCurrentCursorPos(x + 2, y);
-            printf("                                       ");
-            SetCurrentCursorPos(x + 22 - strlen(question[questionNum]) / 2, y);
-            printf("%s", question[questionNum]);
-        }
-        else if (i == 0 && questionNum < 7)
-        {
-            SetCurrentCursorPos(x + 2, y);
-            printf("남은 시간 : %d", (10 - (int)(time_check) % 10) / 2);
-        }
-        SetCurrentCursorPos(x + 41, y++);
-        printf("┃");
-    }
-    SetCurrentCursorPos(x, y++);
-    printf("┗━━━━━━━━━━━━━┓      ━━━━━━━━━━━━━━━━━━━━┛\n");
-    for (int i = 0; i < 5; i++)
-    {
-        SetCurrentCursorPos(x, y++);
-        printf("              ┃");
-        for (int j = 4; j > i; j--)
-        {
-            printf(" ");
-        }
-        printf("/\n");
-    }
+            int block = info[0][y][x];
 
 
-}
-
-int checkAnswer(int posX, int posY, char arr[1], int mode)
-{
-    int arrX = (posX - GBOARD_ORIGIN_X) / 2;
-    int arrY = posY - GBOARD_ORIGIN_Y;
-
-    arrY -= 1;
-
-    switch (answer[questionNum])
-    {
-    case 1:
-        if (0 < arrX && arrX < 11 && 0 < arrY && arrY < 4)
-            return 1;
-        break;
-    case 2:
-        if (46 < arrX && arrX < 57 && 0 < arrY && arrY < 8)
-            return 1;
-        break;
-    case 3:
-        if (0 < arrX && arrX < 10 && 4 < arrY && arrY < 12)
-            return 1;
-        break;
-    case 4:
-        if (47 < arrX && arrX < 57 && 8 < arrY && arrY < 16)
-            return 1;
-        break;
-    case 5:
-        if (0 < arrX && arrX < 9 && 12 < arrY && arrY < 20)
-            return 1;
-        break;
-    case 6:
-        if (48 < arrX && arrX < 57 && 16 < arrY && arrY < 24)
-            return 1;
-        break;
-    case 7:
-        if (0 < arrX && arrX < 8 && 20 < arrY && arrY < 28)
-            return 1;
-        break;
-    case 8:
-        if (49 < arrX && arrX < 57 && 24 < arrY && arrY < 32)
-            return 1;
-        break;
-    case 9:
-        if (0 < arrX && arrX < 7 && 28 < arrY && arrY < 36)
-            return 1;
-        break;
-    default:
-        return 0;
-        break;
-    }
-
-    return 0;
-}
-
-void switchLever_map_8()
-{
-    if (map_id == 8) {
-        if (lever.active == 0) {
-        }
-
-        else if (lever.active == 1) {
-            map[map_id][12][45] = -1;
-            for (int x = 46; x <= 53; x++) {
-                map[map_id][12][x] = 0;
-                map[map_id][12][x] = 0;
-            }
-            map[map_id][12][54] = -1;
-        }
-    }
-}
-void switchLever_map_11() {
-    map_id = 0;
-    for (int i = 0; i < 10; i++)
-        visited[i] = 0;
-    nextStage();
-    setPlayer_s();
-}
-
-void turnOnOffBlock()
-{
-
-    int y = 0;
-    for (int i = 0; i < 3; i++)
-    {
-        switch (i) {
-        case 0: y = 27; break;
-        case 1: y = 29; break;
-        case 2: y = 35; break;
-        }
-        for (int x = start_X; x <= end_X; x++)
-
-        {
-            if (map[map_id][y][x] == 3)
-                map[map_id][y][x] = -3;
-            else if (map[map_id][y][x] == -3)
-                map[map_id][y][x] = 3;
-        }
-
-    }
-
-    for (int y = 1; y < 7; y++)
-    {
-        if (map[map_id][y][67] == 3)
-            map[map_id][y][67] = -3;
-        else if (map[map_id][y][67] == -3)
-            map[map_id][y][67] = 3;
-
-    }
-
-
-    for (int i = 0; i < 3; i++)
-    {
-        switch (i) {
-        case 0: y = 27; break;
-        case 1: y = 29; break;
-        case 2: y = 35; break;
-        }
-
-        for (int x = start_X; x <= end_X; x++)
-        {
             SetCurrentCursorPos(GBOARD_ORIGIN_X + x * 2, GBOARD_ORIGIN_Y + y);
-            if (map[map_id][y][x] == 3)
-            {
+
+            switch (block) {
+            case -1:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 128);
+                printf("  ");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+
+            case 1: case 2:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 240);
+                printf("  ");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+
+            case 3:
                 SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 192);
                 printf("  ");
-            }
-            else if (map[map_id][y][x] == -3) {
-                if (floodingState == 1 && surFaceHeight <= y) {
-                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 144);
-                }
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+            case 4:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 9);
+                printf("▦");    // 발판에 박스 올려져 있을 때
+                break;
+
+            case 5:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
+                printf("▣");
+                break;
+            case 6:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 9);
+                printf(" ＿");    // 발판(박스 올려 놓는 곳)
+                plate.pos.X = x;
+                plate.pos.Y = y;
+                break;
+
+            case 7:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
+                if (lever.active == 0)
+                    printf("＼");
                 else
-                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                    printf("　");
+                break;
+            case 8:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
+                if (lever.active == 1)
+                    printf("／");
+                else
+                    printf("　");
+                break;
+            case 9:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
+                printf("▣");    // 레버 밑판
+                lever.pos.X = x;
+                lever.pos.Y = y;
+                break;
+            case 11:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 144);
+                printf("□");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+            case 12:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 192);
+                printf("□");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+            case 13:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 224);
+                printf("▨");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+            case 20:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 32);
                 printf("  ");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+            case 22:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 32);
+                printf("  ");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+            case -22:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 128);
+                printf("  ");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+            case 112:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
+                printf("l ");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+            case 113:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
+                printf("▶");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+            case 114:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 9);
+                printf("l ");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+            case 115:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 9);
+                printf("▶");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+            case 23:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 32);
+                printf("▨");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+            case 24:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 32);
+                printf("  ");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+            case 25:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 32);
+                printf("▨");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+            case 31:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 64);
+                printf("  ");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+            case 32:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 16);
+                printf("  ");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+            case 33:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 80);
+                printf("  ");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+            case 44:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 144);
+                printf("  ");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+            case 45:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+                printf(" +");
+                break;
+
+            case 71://빨간색
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 192);
+                printf("  ");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+            case 72://검정색
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                printf("  ");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+            case 73://파란색
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 16);
+                printf("  ");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+            case 74://초록색
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 160);
+                printf("  ");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+            case 75://흰색
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 240);
+                printf("  ");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+
+            case 91:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 240);
+                printf("① ");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+
+            case 92:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 240);
+                printf("② ");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+
+            case 93:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 240);
+                printf("③ ");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+
+            case 94:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 240);
+                printf("④ ");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+
+            case 95:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 240);
+                printf("⑤ ");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+
+            case 96:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 240);
+                printf("⑥ ");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+
+            case 97:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 240);
+                printf("⑦ ");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+
+            case 98:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 240);
+                printf("⑧ ");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+
+            case 99:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 240);
+                printf("⑨ ");
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
+                break;
+
+            default:
+                printf("　");
+                break;
             }
-            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
         }
 
-    }
+}
+void print1()
+{
+    SetCurrentCursorPos(9 * 2 + GBOARD_ORIGIN_X * 2, 2 + GBOARD_ORIGIN_Y);
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+    printf("◆ 키 w, a, d를 이용해 점프, 좌, 우로 움직일 수 있다.");
+    SetCurrentCursorPos(9 * 2 + GBOARD_ORIGIN_X * 2, 4 + GBOARD_ORIGIN_Y);
+    printf("◆ Tab + 방향키 ←, ↑ , ↓ , → 를 이용해 8방향으로 ");
+    SetCurrentCursorPos(9 * 2 + GBOARD_ORIGIN_X * 2, 6 + GBOARD_ORIGIN_Y);
+    printf("   총의 방향을 바꿀 수 있다.");
+    SetCurrentCursorPos(9 * 2 + GBOARD_ORIGIN_X * 2, 8 + GBOARD_ORIGIN_Y);
+    printf("◆ 숫자키 1,2번을 통해 포탈의 색을 바꿀 수 있다.");
 
 
-    for (int y = 1; y < 7; y++)
-    {
 
-        SetCurrentCursorPos(GBOARD_ORIGIN_X + 67 * 2, GBOARD_ORIGIN_Y + y);
-        if (map[map_id][y][67] == 3)
-        {
-            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 192);
-            printf("  ");
-        }
-        else if (map[map_id][y][67] == -3) {
-            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0);
-            printf("  ");
-        }
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
-
-    }
-
+    SetCurrentCursorPos(9 * 2 + GBOARD_ORIGIN_X * 2, 14 + GBOARD_ORIGIN_Y);
+    printf("◆ 거울 총으로 거울을 향하여 포탈을 쏘면");
+    SetCurrentCursorPos(9 * 2 + GBOARD_ORIGIN_X * 2, 16 + GBOARD_ORIGIN_Y);
+    printf("   반사된 곳에 포탈을 쏠 수 있다.");
+    SetCurrentCursorPos(9 * 2 + GBOARD_ORIGIN_X * 2, 18 + GBOARD_ORIGIN_Y);
+    printf("◆ 숫자키 3번을 통해 포탈의 색을 바꿀 수 있다.");
 
 }
 
-void drawTheSurfaceOfWater(int surfaceH)
+void print2()
+{
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+    SetCurrentCursorPos(52 * 2 + GBOARD_ORIGIN_X * 2, 5 + GBOARD_ORIGIN_Y);
+    printf("◆ 다음 맵으로 넘어가는 포탈이다.");
+    SetCurrentCursorPos(52 * 2 + GBOARD_ORIGIN_X * 2, 11 + GBOARD_ORIGIN_Y);
+    printf("◆ 이전 맵으로 넘어가는 포탈이다.");
+    SetCurrentCursorPos(52 * 2 + GBOARD_ORIGIN_X * 2, 16 + GBOARD_ORIGIN_Y);
+    printf("◆ 비활성화 된 포탈로 레버나 발판 등을 이용해");
+    SetCurrentCursorPos(52 * 2 + GBOARD_ORIGIN_X * 2, 18 + GBOARD_ORIGIN_Y);
+    printf("   활성화 시켜야 한다.");
+}
+void print3()
+{
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+    SetCurrentCursorPos(9 * 2 + GBOARD_ORIGIN_X * 2, 26 + GBOARD_ORIGIN_Y);
+    printf("◆ 레버 : f를 사용해 상호작용을 할 수 있다.");
+    SetCurrentCursorPos(9 * 2 + GBOARD_ORIGIN_X * 2, 34 + GBOARD_ORIGIN_Y);
+    printf("◆ 상자 , 발판 : 상자는 f을 이용해 상호작용을 할 수 있다.");
+    SetCurrentCursorPos(9 * 2 + GBOARD_ORIGIN_X * 2, 37 + GBOARD_ORIGIN_Y);
+    printf("◆ 상자 + 발판 : 발판위에 상자를 놓게 되면 활성화 된다.");
+
+}
+
+void print4()
 {
 
+    printItem(n);
+    n += 7;
+    item1 = 1;
+    printItem(n);
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+    SetCurrentCursorPos(52 * 2 + GBOARD_ORIGIN_X * 2, 26 + GBOARD_ORIGIN_Y);
+    printf("◆ 손전등 : 시야축소맵에서 사용할수 있다.");
+    SetCurrentCursorPos(52 * 2 + GBOARD_ORIGIN_X * 2, 29 + GBOARD_ORIGIN_Y);
+    printf("◆ 미니게임을 통해 획득 할 수 있으며,");
+    SetCurrentCursorPos(52 * 2 + GBOARD_ORIGIN_X * 2, 31 + GBOARD_ORIGIN_Y);
+    printf("   1초동안 시야를 밝혀준다.");
+    SetCurrentCursorPos(52 * 2 + GBOARD_ORIGIN_X * 2, 33 + GBOARD_ORIGIN_Y);
+    printf("◆ q를 통해 사용가능하다.");
 
-    for (int x = 0; x < GBOARD_WIDTH + 2; x++) {
-        int block = map[map_id][surfaceH][x];
-        SetCurrentCursorPos(GBOARD_ORIGIN_X + x * 2, GBOARD_ORIGIN_Y + surfaceH);
-        if (block == 0) {
-            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 144);
-            printf("  ");
-            map[map_id][surfaceH][x] = 44;
+    SetCurrentCursorPos(50 * 2 + GBOARD_ORIGIN_X * 2, 37 + GBOARD_ORIGIN_Y);
+    printf("Press Enter Key To Game Start!!!!!!");
+}
+
+void printItem(int n)
+{
+    int num = 0;
+
+    if (item1 == 1)num = 15;
+    else num = 8;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), num);
+    for (int y = 0; y < 3; y++)
+    {
+        for (int x = 0; x < 10; x++)
+        {
+            SetCurrentCursorPos((42 + GBOARD_ORIGIN_X + x) * 2, 24 + GBOARD_ORIGIN_Y + y + n);
+            {
+                switch (ItemState[0][y][x])
+                {
+
+                case 2:printf("│"); break;
+                case 3:printf("─"); break;
+                case 6:printf("┌"); break;
+                case 7:printf("┐"); break;
+                case 8:printf("└"); break;
+                case 9:printf("┘"); break;
+                default: printf("  "); break;
+
+                }
+            }
         }
     }
+
+
+    if (item1 == 1)num = 14;
+    else num = 8;
+
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), num);
+    SetCurrentCursorPos(42 * 2 + GBOARD_ORIGIN_X * 2 + 2 * 2, 24 + GBOARD_ORIGIN_Y + 1 + n);
+
+    printf(" ※손전등※");
+
 
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 }
 
-void switchLever() {
-    if (lever.active == 0) {
-
-    }
-    else if (lever.active == 1) {
-        if (map_id == 9) {
-            start_flooding = clock();
-            floodingState = 1;
-        }
-
-    }
-}
-
-void Map_9()
+void printInfo(int n)
 {
-
-    if ((int)time_check != flag3 && ((int)time_check) - 1 != flag3) {
-        turnOnOffBlock();
-        flag3 = (int)time_check;
-    }
-
-
-    double flooding_time_check = (double)(end_flooding - start_flooding) / CLOCKS_PER_SEC;
-    if (flooding_time_check <= 12 && map_id == 9 && surFaceHeight > 0 && floodingState == 1) {
-        SetCurrentCursorPos((GBOARD_ORIGIN_X + GBOARD_WIDTH * 2) - 16, (GBOARD_ORIGIN_Y + GBOARD_HEIGHT) - 8);
-
-        if (flooding_time_check < 10) {
-            if ((int)flooding_time_check == 1) {
-                SetCurrentCursorPos((GBOARD_ORIGIN_X + GBOARD_WIDTH * 2) - 16, (GBOARD_ORIGIN_Y + GBOARD_HEIGHT) - 8);
-                printf("남은 시간 :   ");
-            }
-            SetCurrentCursorPos((GBOARD_ORIGIN_X + GBOARD_WIDTH * 2) - 16, (GBOARD_ORIGIN_Y + GBOARD_HEIGHT) - 8);
-            printf("남은 시간 : %d", 10 - (int)flooding_time_check);
-        }
-        else if ((int)flooding_time_check == 10) {
-            SetCurrentCursorPos((GBOARD_ORIGIN_X + GBOARD_WIDTH * 2) - 16, (GBOARD_ORIGIN_Y + GBOARD_HEIGHT) - 8);
-            printf("남은 시간 : %d", 0);
-        }
-        else  if ((int)flooding_time_check == 11) {
-            SetCurrentCursorPos((GBOARD_ORIGIN_X + GBOARD_WIDTH * 2) - 16, (GBOARD_ORIGIN_Y + GBOARD_HEIGHT) - 8);
-            printf("                 ");
-        }
-
-    }
-
-    if (flooding_time_check >= 10 && map_id == 9 && surFaceHeight > 0 && floodingState == 1)
-    {
-
-        if ((int)time_check != flag) {
-            surFaceHeight--;
-            drawTheSurfaceOfWater(surFaceHeight);
-            flag = (int)time_check;
-        }
-
-    }
-
-}
-
-void showResult() {
-    // 플레이 타임
-    SetCurrentCursorPos(GBOARD_ORIGIN_X + 37 * 2, GBOARD_ORIGIN_Y + 4);
-    printf("[플레이 한 시간] %d", time_gameover);
-
-    // 포탈 발사 횟수
-    SetCurrentCursorPos(GBOARD_ORIGIN_X + 37 * 2, GBOARD_ORIGIN_Y + 5);
-    printf("[포탈 발사 횟수] %d", cnt_shoot);
-
-    // 포탈 간 이동 횟수
-    SetCurrentCursorPos(GBOARD_ORIGIN_X + 37 * 2, GBOARD_ORIGIN_Y + 6);
-    printf("[포탈 간 이동 횟수] %d", cnt_teleport);
-
-    // Restart !!
-    SetCurrentCursorPos(GBOARD_ORIGIN_X + 65 * 2, GBOARD_ORIGIN_Y + 26);
-    printf(" ↑");
-
-    SetCurrentCursorPos(GBOARD_ORIGIN_X + 65 * 2, GBOARD_ORIGIN_Y + 27);
-    printf("RESTART");
-
-
-    SetCurrentCursorPos(player.pos.X, player.pos.Y);
-}
-void showResult2() {
-    // 플레이 타임
-    SetCurrentCursorPos(GBOARD_ORIGIN_X + 29 * 2, GBOARD_ORIGIN_Y + 34);
-    printf("[플레이 한 시간] %d", time_gameover);
-
-    // 포탈 발사 횟수
-    SetCurrentCursorPos(GBOARD_ORIGIN_X + 29 * 2, GBOARD_ORIGIN_Y + 35);
-    printf("[포탈 발사 횟수] %d", cnt_shoot);
-
-    // 포탈 간 이동 횟수
-    SetCurrentCursorPos(GBOARD_ORIGIN_X + 29 * 2, GBOARD_ORIGIN_Y + 36);
-    printf("[포탈 간 이동 횟수] %d", cnt_teleport);
-
-    SetCurrentCursorPos(player.pos.X, player.pos.Y);
+    DrawingInfo();
+    print1();
+    print2();
+    print3();
+    print4(n);
 }
