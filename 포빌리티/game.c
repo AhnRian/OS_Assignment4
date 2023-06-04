@@ -343,6 +343,24 @@ int main() {
 
         }
 
+        if (player.pos.Y - 2 >= surFaceHeight && floodingState == 1 && map_id == 9) {
+            SetCurrentCursorPos((GBOARD_ORIGIN_X + GBOARD_WIDTH * 2) / 2 + 2, (GBOARD_ORIGIN_Y + GBOARD_HEIGHT) / 2);
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+            if (surFaceHeight >= GBOARD_HEIGHT)
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 144);
+            printf("gameover");
+            map_id = 10;
+            nextStage();
+            setPlayer_s();
+        }
+
+        end = clock();
+        end_flooding = clock();
+        locate1 = map_id;
+        time_check = (double)(end - start) / CLOCKS_PER_SEC;            // 경과시간 측정
+
+
+        
         SetCurrentCursorPos(40, 0);
         printf("경과시간 : %d angle : %d  \n", (int)time_check, player.angle);      // 경과시간 출력       
         if (map_id == 6)
@@ -358,7 +376,9 @@ int main() {
                 printQuestion();
         }
 
+
         SetCurrentCursorPos(player.pos.X, player.pos.Y);
+
         ShowPlayer();
         Sleep(20);
         Down();
@@ -4459,5 +4479,80 @@ void turnOnOffBlock()
 
     }
 
+
+}
+
+void drawTheSurfaceOfWater(int surfaceH)
+{
+
+
+    for (int x = 0; x < GBOARD_WIDTH + 2; x++) {
+        int block = map[map_id][surfaceH][x];
+        SetCurrentCursorPos(GBOARD_ORIGIN_X + x * 2, GBOARD_ORIGIN_Y + surfaceH);
+        if (block == 0) {
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 144);
+            printf("  ");
+            map[map_id][surfaceH][x] = 44;
+        }
+    }
+
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+}
+
+void switchLever() {
+    if (lever.active == 0) {
+
+    }
+    else if (lever.active == 1) {
+        if (map_id == 9) {
+            start_flooding = clock();
+            floodingState = 1;
+        }
+
+    }
+}
+
+void Map_9()
+{
+
+    if ((int)time_check != flag3 && ((int)time_check) - 1 != flag3) {
+        turnOnOffBlock();
+        flag3 = (int)time_check;
+    }
+
+
+    double flooding_time_check = (double)(end_flooding - start_flooding) / CLOCKS_PER_SEC;
+    if (flooding_time_check <= 12 && map_id == 9 && surFaceHeight > 0 && floodingState == 1) {
+        SetCurrentCursorPos((GBOARD_ORIGIN_X + GBOARD_WIDTH * 2) - 16, (GBOARD_ORIGIN_Y + GBOARD_HEIGHT) - 8);
+
+        if (flooding_time_check < 10) {
+            if ((int)flooding_time_check == 1) {
+                SetCurrentCursorPos((GBOARD_ORIGIN_X + GBOARD_WIDTH * 2) - 16, (GBOARD_ORIGIN_Y + GBOARD_HEIGHT) - 8);
+                printf("남은 시간 :   ");
+            }
+            SetCurrentCursorPos((GBOARD_ORIGIN_X + GBOARD_WIDTH * 2) - 16, (GBOARD_ORIGIN_Y + GBOARD_HEIGHT) - 8);
+            printf("남은 시간 : %d", 10 - (int)flooding_time_check);
+        }
+        else if ((int)flooding_time_check == 10) {
+            SetCurrentCursorPos((GBOARD_ORIGIN_X + GBOARD_WIDTH * 2) - 16, (GBOARD_ORIGIN_Y + GBOARD_HEIGHT) - 8);
+            printf("남은 시간 : %d", 0);
+        }
+        else  if ((int)flooding_time_check == 11) {
+            SetCurrentCursorPos((GBOARD_ORIGIN_X + GBOARD_WIDTH * 2) - 16, (GBOARD_ORIGIN_Y + GBOARD_HEIGHT) - 8);
+            printf("                 ");
+        }
+
+    }
+
+    if (flooding_time_check >= 10 && map_id == 9 && surFaceHeight > 0 && floodingState == 1)
+    {
+
+        if ((int)time_check != flag) {
+            surFaceHeight--;
+            drawTheSurfaceOfWater(surFaceHeight);
+            flag = (int)time_check;
+        }
+
+    }
 
 }
