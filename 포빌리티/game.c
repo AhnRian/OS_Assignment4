@@ -423,7 +423,7 @@ int main() {
         }
     }
 
-    }
+    
 }
 
 
@@ -4587,4 +4587,43 @@ void Map_9()
 
     }
 
+}
+
+void showResult() {
+    // ÇÃ·¹ÀÌ Å¸ÀÓ
+    SetCurrentCursorPos(GBOARD_ORIGIN_X + 37 * 2, GBOARD_ORIGIN_Y + 4);
+    printf("[ÇÃ·¹ÀÌ ÇÑ ½Ã°£] %d", time_gameover);
+
+    // Æ÷Å» ¹ß»ç È½¼ö
+    SetCurrentCursorPos(GBOARD_ORIGIN_X + 37 * 2, GBOARD_ORIGIN_Y + 5);
+    printf("[Æ÷Å» ¹ß»ç È½¼ö] %d", cnt_shoot);
+
+    // Æ÷Å» °£ ÀÌµ¿ È½¼ö
+    SetCurrentCursorPos(GBOARD_ORIGIN_X + 37 * 2, GBOARD_ORIGIN_Y + 6);
+    printf("[Æ÷Å» °£ ÀÌµ¿ È½¼ö] %d", cnt_teleport);
+
+    // Restart !!
+    SetCurrentCursorPos(GBOARD_ORIGIN_X + 65 * 2, GBOARD_ORIGIN_Y + 26);
+    printf(" ¡è");
+
+    SetCurrentCursorPos(GBOARD_ORIGIN_X + 65 * 2, GBOARD_ORIGIN_Y + 27);
+    printf("RESTART");
+
+
+    SetCurrentCursorPos(player.pos.X, player.pos.Y);
+}
+void showResult2() {
+    // ÇÃ·¹ÀÌ Å¸ÀÓ
+    SetCurrentCursorPos(GBOARD_ORIGIN_X + 29 * 2, GBOARD_ORIGIN_Y + 34);
+    printf("[ÇÃ·¹ÀÌ ÇÑ ½Ã°£] %d", time_gameover);
+
+    // Æ÷Å» ¹ß»ç È½¼ö
+    SetCurrentCursorPos(GBOARD_ORIGIN_X + 29 * 2, GBOARD_ORIGIN_Y + 35);
+    printf("[Æ÷Å» ¹ß»ç È½¼ö] %d", cnt_shoot);
+
+    // Æ÷Å» °£ ÀÌµ¿ È½¼ö
+    SetCurrentCursorPos(GBOARD_ORIGIN_X + 29 * 2, GBOARD_ORIGIN_Y + 36);
+    printf("[Æ÷Å» °£ ÀÌµ¿ È½¼ö] %d", cnt_teleport);
+
+    SetCurrentCursorPos(player.pos.X, player.pos.Y);
 }
