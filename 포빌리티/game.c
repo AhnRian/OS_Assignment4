@@ -3389,13 +3389,13 @@ void drawTheSurfaceOfWater(int surfaceH)
 {
 
 
-    for (int X = 0; X < GBOARD_WIDTH + 2; X++) {
-        int block = map[map_id][surfaceH][X];
-        SetCurrentCursorPos(GBOARD_ORIGIN_X + X * 2, GBOARD_ORIGIN_Y + surfaceH);
+    for (int x = 0; x < GBOARD_WIDTH + 2; x++) {
+        int block = map[map_id][surfaceH][x];
+        SetCurrentCursorPos(GBOARD_ORIGIN_X + x * 2, GBOARD_ORIGIN_Y + surfaceH);
         if (block == 0) {
             SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 144);
             printf("  ");
-            map[map_id][surfaceH][X] = 44;
+            map[map_id][surfaceH][x] = 44;
         }
     }
 
